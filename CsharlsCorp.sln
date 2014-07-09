@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceManager", "CsharlsCorp.BalanceManager\BalanceManager.csproj", "{4636F2F8-C839-4DA2-BE03-0F7023E001C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsharlsCorp.BalanceManager", "CsharlsCorp.BalanceManager\CsharlsCorp.BalanceManager.csproj", "{4636F2F8-C839-4DA2-BE03-0F7023E001C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
