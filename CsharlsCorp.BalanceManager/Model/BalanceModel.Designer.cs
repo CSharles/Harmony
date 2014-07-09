@@ -18,10 +18,10 @@ using System.Runtime.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region Metadatos de relaciones en EDM
 
-[assembly: EdmRelationshipAttribute("BalanceModel", "DetailOfInvoice", "Detail", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Detail), "Invoice", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CsharlsCorp.BalanceManager.Model.Invoice), true)]
 [assembly: EdmRelationshipAttribute("BalanceModel", "TypeTransaction", "Type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Type), "Transaction", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CsharlsCorp.BalanceManager.Model.Transaction), true)]
 [assembly: EdmRelationshipAttribute("BalanceModel", "TransactionDetail", "Transaction", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Transaction), "Detail", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(CsharlsCorp.BalanceManager.Model.Detail))]
-[assembly: EdmRelationshipAttribute("BalanceModel", "BillsPerInvoice", "Bill", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Bill), "Invoice", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CsharlsCorp.BalanceManager.Model.Invoice), true)]
+[assembly: EdmRelationshipAttribute("BalanceModel", "BillOfMoneyDetail", "Bill", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Bill), "MoneyDetail", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CsharlsCorp.BalanceManager.Model.MoneyDetail), true)]
+[assembly: EdmRelationshipAttribute("BalanceModel", "DetailMoneyDetail", "Detail", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Detail), "MoneyDetail", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CsharlsCorp.BalanceManager.Model.MoneyDetail), true)]
 
 #endregion
 
@@ -140,18 +140,18 @@ namespace CsharlsCorp.BalanceManager.Model
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        public ObjectSet<Invoice> Invoices
+        public ObjectSet<MoneyDetail> MoneyDetail
         {
             get
             {
-                if ((_Invoices == null))
+                if ((_MoneyDetail == null))
                 {
-                    _Invoices = base.CreateObjectSet<Invoice>("Invoices");
+                    _MoneyDetail = base.CreateObjectSet<MoneyDetail>("MoneyDetail");
                 }
-                return _Invoices;
+                return _MoneyDetail;
             }
         }
-        private ObjectSet<Invoice> _Invoices;
+        private ObjectSet<MoneyDetail> _MoneyDetail;
 
         #endregion
         #region Métodos AddTo
@@ -189,11 +189,11 @@ namespace CsharlsCorp.BalanceManager.Model
         }
     
         /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet Invoices. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// Método desusado para agregar un nuevo objeto al EntitySet MoneyDetail. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
         /// </summary>
-        public void AddToInvoices(Invoice invoice)
+        public void AddToMoneyDetail(MoneyDetail moneyDetail)
         {
-            base.AddObject("Invoices", invoice);
+            base.AddObject("MoneyDetail", moneyDetail);
         }
 
         #endregion
@@ -291,18 +291,18 @@ namespace CsharlsCorp.BalanceManager.Model
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "BillsPerInvoice", "Invoice")]
-        public EntityCollection<Invoice> Invoice
+        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "BillOfMoneyDetail", "MoneyDetail")]
+        public EntityCollection<MoneyDetail> MoneyDetails
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Invoice>("BalanceModel.BillsPerInvoice", "Invoice");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<MoneyDetail>("BalanceModel.BillOfMoneyDetail", "MoneyDetail");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Invoice>("BalanceModel.BillsPerInvoice", "Invoice", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<MoneyDetail>("BalanceModel.BillOfMoneyDetail", "MoneyDetail", value);
                 }
             }
         }
@@ -423,28 +423,6 @@ namespace CsharlsCorp.BalanceManager.Model
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "DetailOfInvoice", "Invoice")]
-        public EntityCollection<Invoice> Invoices
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Invoice>("BalanceModel.DetailOfInvoice", "Invoice");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Invoice>("BalanceModel.DetailOfInvoice", "Invoice", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "TransactionDetail", "Transaction")]
         public Transaction Transaction
         {
@@ -476,6 +454,28 @@ namespace CsharlsCorp.BalanceManager.Model
                 }
             }
         }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "DetailMoneyDetail", "MoneyDetail")]
+        public EntityCollection<MoneyDetail> MoneyDetails
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<MoneyDetail>("BalanceModel.DetailMoneyDetail", "MoneyDetail");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<MoneyDetail>("BalanceModel.DetailMoneyDetail", "MoneyDetail", value);
+                }
+            }
+        }
 
         #endregion
     }
@@ -483,28 +483,28 @@ namespace CsharlsCorp.BalanceManager.Model
     /// <summary>
     /// No hay documentación de metadatos disponible.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="BalanceModel", Name="Invoice")]
+    [EdmEntityTypeAttribute(NamespaceName="BalanceModel", Name="MoneyDetail")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class Invoice : EntityObject
+    public partial class MoneyDetail : EntityObject
     {
         #region Método de generador
     
         /// <summary>
-        /// Crear un nuevo objeto Invoice.
+        /// Crear un nuevo objeto MoneyDetail.
         /// </summary>
         /// <param name="invoiceId">Valor inicial de la propiedad invoiceId.</param>
         /// <param name="billQuantity">Valor inicial de la propiedad billQuantity.</param>
+        /// <param name="billId">Valor inicial de la propiedad billId.</param>
         /// <param name="detailId">Valor inicial de la propiedad detailId.</param>
-        /// <param name="bill_billId">Valor inicial de la propiedad Bill_billId.</param>
-        public static Invoice CreateInvoice(global::System.Int32 invoiceId, global::System.Int32 billQuantity, global::System.Int32 detailId, global::System.Int32 bill_billId)
+        public static MoneyDetail CreateMoneyDetail(global::System.Int32 invoiceId, global::System.Int32 billQuantity, global::System.Int32 billId, global::System.Int32 detailId)
         {
-            Invoice invoice = new Invoice();
-            invoice.invoiceId = invoiceId;
-            invoice.billQuantity = billQuantity;
-            invoice.detailId = detailId;
-            invoice.Bill_billId = bill_billId;
-            return invoice;
+            MoneyDetail moneyDetail = new MoneyDetail();
+            moneyDetail.invoiceId = invoiceId;
+            moneyDetail.billQuantity = billQuantity;
+            moneyDetail.billId = billId;
+            moneyDetail.detailId = detailId;
+            return moneyDetail;
         }
 
         #endregion
@@ -566,6 +566,30 @@ namespace CsharlsCorp.BalanceManager.Model
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
+        public global::System.Int32 billId
+        {
+            get
+            {
+                return _billId;
+            }
+            set
+            {
+                OnbillIdChanging(value);
+                ReportPropertyChanging("billId");
+                _billId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("billId");
+                OnbillIdChanged();
+            }
+        }
+        private global::System.Int32 _billId;
+        partial void OnbillIdChanging(global::System.Int32 value);
+        partial void OnbillIdChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
         public global::System.Int32 detailId
         {
             get
@@ -584,30 +608,6 @@ namespace CsharlsCorp.BalanceManager.Model
         private global::System.Int32 _detailId;
         partial void OndetailIdChanging(global::System.Int32 value);
         partial void OndetailIdChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 Bill_billId
-        {
-            get
-            {
-                return _Bill_billId;
-            }
-            set
-            {
-                OnBill_billIdChanging(value);
-                ReportPropertyChanging("Bill_billId");
-                _Bill_billId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Bill_billId");
-                OnBill_billIdChanged();
-            }
-        }
-        private global::System.Int32 _Bill_billId;
-        partial void OnBill_billIdChanging(global::System.Int32 value);
-        partial void OnBill_billIdChanged();
 
         #endregion
     
@@ -619,54 +619,16 @@ namespace CsharlsCorp.BalanceManager.Model
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "DetailOfInvoice", "Detail")]
-        public Detail Detail
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.DetailOfInvoice", "Detail").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.DetailOfInvoice", "Detail").Value = value;
-            }
-        }
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<Detail> DetailReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.DetailOfInvoice", "Detail");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Detail>("BalanceModel.DetailOfInvoice", "Detail", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "BillsPerInvoice", "Bill")]
+        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "BillOfMoneyDetail", "Bill")]
         public Bill Bill
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Bill>("BalanceModel.BillsPerInvoice", "Bill").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Bill>("BalanceModel.BillOfMoneyDetail", "Bill").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Bill>("BalanceModel.BillsPerInvoice", "Bill").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Bill>("BalanceModel.BillOfMoneyDetail", "Bill").Value = value;
             }
         }
         /// <summary>
@@ -678,13 +640,51 @@ namespace CsharlsCorp.BalanceManager.Model
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Bill>("BalanceModel.BillsPerInvoice", "Bill");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Bill>("BalanceModel.BillOfMoneyDetail", "Bill");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Bill>("BalanceModel.BillsPerInvoice", "Bill", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Bill>("BalanceModel.BillOfMoneyDetail", "Bill", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "DetailMoneyDetail", "Detail")]
+        public Detail Detail
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.DetailMoneyDetail", "Detail").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.DetailMoneyDetail", "Detail").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Detail> DetailReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.DetailMoneyDetail", "Detail");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Detail>("BalanceModel.DetailMoneyDetail", "Detail", value);
                 }
             }
         }
@@ -708,14 +708,14 @@ namespace CsharlsCorp.BalanceManager.Model
         /// <param name="transactionId">Valor inicial de la propiedad transactionId.</param>
         /// <param name="amount">Valor inicial de la propiedad amount.</param>
         /// <param name="date">Valor inicial de la propiedad date.</param>
-        /// <param name="type_typeId">Valor inicial de la propiedad Type_typeId.</param>
-        public static Transaction CreateTransaction(global::System.Int32 transactionId, global::System.Decimal amount, global::System.DateTime date, global::System.Int32 type_typeId)
+        /// <param name="typeId">Valor inicial de la propiedad typeId.</param>
+        public static Transaction CreateTransaction(global::System.Int32 transactionId, global::System.Decimal amount, global::System.DateTime date, global::System.Int32 typeId)
         {
             Transaction transaction = new Transaction();
             transaction.transactionId = transactionId;
             transaction.amount = amount;
             transaction.date = date;
-            transaction.Type_typeId = type_typeId;
+            transaction.typeId = typeId;
             return transaction;
         }
 
@@ -805,24 +805,24 @@ namespace CsharlsCorp.BalanceManager.Model
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 Type_typeId
+        public global::System.Int32 typeId
         {
             get
             {
-                return _Type_typeId;
+                return _typeId;
             }
             set
             {
-                OnType_typeIdChanging(value);
-                ReportPropertyChanging("Type_typeId");
-                _Type_typeId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Type_typeId");
-                OnType_typeIdChanged();
+                OntypeIdChanging(value);
+                ReportPropertyChanging("typeId");
+                _typeId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("typeId");
+                OntypeIdChanged();
             }
         }
-        private global::System.Int32 _Type_typeId;
-        partial void OnType_typeIdChanging(global::System.Int32 value);
-        partial void OnType_typeIdChanged();
+        private global::System.Int32 _typeId;
+        partial void OntypeIdChanging(global::System.Int32 value);
+        partial void OntypeIdChanged();
 
         #endregion
     

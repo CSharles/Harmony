@@ -17,11 +17,7 @@
           <EntitySet Name="Details" EntityType="BalanceModel.Detail" />
           <EntitySet Name="Types" EntityType="BalanceModel.Type" />
           <EntitySet Name="Bills" EntityType="BalanceModel.Bill" />
-          <EntitySet Name="Invoices" EntityType="BalanceModel.Invoice" />
-          <AssociationSet Name="DetailOfInvoice" Association="BalanceModel.DetailOfInvoice">
-            <End Role="Detail" EntitySet="Details" />
-            <End Role="Invoice" EntitySet="Invoices" />
-          </AssociationSet>
+          <EntitySet Name="MoneyDetail" EntityType="BalanceModel.MoneyDetail" />
           <AssociationSet Name="TypeTransaction" Association="BalanceModel.TypeTransaction">
             <End Role="Type" EntitySet="Types" />
             <End Role="Transaction" EntitySet="Transactions" />
@@ -30,9 +26,13 @@
             <End Role="Transaction" EntitySet="Transactions" />
             <End Role="Detail" EntitySet="Details" />
           </AssociationSet>
-          <AssociationSet Name="BillsPerInvoice" Association="BalanceModel.BillsPerInvoice">
+          <AssociationSet Name="BillOfMoneyDetail" Association="BalanceModel.BillOfMoneyDetail">
             <End Role="Bill" EntitySet="Bills" />
-            <End Role="Invoice" EntitySet="Invoices" />
+            <End Role="MoneyDetail" EntitySet="MoneyDetail" />
+          </AssociationSet>
+          <AssociationSet Name="DetailMoneyDetail" Association="BalanceModel.DetailMoneyDetail">
+            <End Role="Detail" EntitySet="Details" />
+            <End Role="MoneyDetail" EntitySet="MoneyDetail" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Transaction">
@@ -47,7 +47,7 @@
           </Property>
           <Property Type="DateTime" Name="date" Nullable="false" />
           <NavigationProperty Name="Type" Relationship="BalanceModel.TypeTransaction" FromRole="Transaction" ToRole="Type" />
-          <Property Type="Int32" Name="Type_typeId" Nullable="false" />
+          <Property Type="Int32" Name="typeId" Nullable="false" />
           <NavigationProperty Name="Detail" Relationship="BalanceModel.TransactionDetail" FromRole="Transaction" ToRole="Detail" />
         </EntityType>
         <EntityType Name="Detail">
@@ -56,9 +56,9 @@
           </Key>
           <Property Type="Int32" Name="detailId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="description" Nullable="false" MaxLength="100" />
-          <NavigationProperty Name="Invoices" Relationship="BalanceModel.DetailOfInvoice" FromRole="Detail" ToRole="Invoice" />
           <Property Type="Int32" Name="transactionId" Nullable="false" />
           <NavigationProperty Name="Transaction" Relationship="BalanceModel.TransactionDetail" FromRole="Detail" ToRole="Transaction" />
+          <NavigationProperty Name="MoneyDetails" Relationship="BalanceModel.DetailMoneyDetail" FromRole="Detail" ToRole="MoneyDetail" />
         </EntityType>
         <EntityType Name="Type">
           <Key>
@@ -74,31 +74,19 @@
           </Key>
           <Property Type="Int32" Name="billId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="denomination" Nullable="false" MaxLength="30" />
-          <NavigationProperty Name="Invoice" Relationship="BalanceModel.BillsPerInvoice" FromRole="Bill" ToRole="Invoice" />
+          <NavigationProperty Name="MoneyDetails" Relationship="BalanceModel.BillOfMoneyDetail" FromRole="Bill" ToRole="MoneyDetail" />
         </EntityType>
-        <EntityType Name="Invoice">
+        <EntityType Name="MoneyDetail">
           <Key>
             <PropertyRef Name="invoiceId" />
           </Key>
           <Property Type="Int32" Name="invoiceId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Int32" Name="billQuantity" Nullable="false" />
-          <NavigationProperty Name="Detail" Relationship="BalanceModel.DetailOfInvoice" FromRole="Invoice" ToRole="Detail" />
+          <NavigationProperty Name="Bill" Relationship="BalanceModel.BillOfMoneyDetail" FromRole="MoneyDetail" ToRole="Bill" />
+          <Property Type="Int32" Name="billId" Nullable="false" />
+          <NavigationProperty Name="Detail" Relationship="BalanceModel.DetailMoneyDetail" FromRole="MoneyDetail" ToRole="Detail" />
           <Property Type="Int32" Name="detailId" Nullable="false" />
-          <NavigationProperty Name="Bill" Relationship="BalanceModel.BillsPerInvoice" FromRole="Invoice" ToRole="Bill" />
-          <Property Type="Int32" Name="Bill_billId" Nullable="false" />
         </EntityType>
-        <Association Name="DetailOfInvoice">
-          <End Type="BalanceModel.Detail" Role="Detail" Multiplicity="1" />
-          <End Type="BalanceModel.Invoice" Role="Invoice" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Detail">
-              <PropertyRef Name="detailId" />
-            </Principal>
-            <Dependent Role="Invoice">
-              <PropertyRef Name="detailId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="TypeTransaction">
           <End Type="BalanceModel.Type" Role="Type" Multiplicity="1" />
           <End Type="BalanceModel.Transaction" Role="Transaction" Multiplicity="*" />
@@ -107,7 +95,7 @@
               <PropertyRef Name="typeId" />
             </Principal>
             <Dependent Role="Transaction">
-              <PropertyRef Name="Type_typeId" />
+              <PropertyRef Name="typeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -115,15 +103,27 @@
           <End Type="BalanceModel.Transaction" Role="Transaction" Multiplicity="1" />
           <End Type="BalanceModel.Detail" Role="Detail" Multiplicity="0..1" />
         </Association>
-        <Association Name="BillsPerInvoice">
+        <Association Name="BillOfMoneyDetail">
           <End Type="BalanceModel.Bill" Role="Bill" Multiplicity="1" />
-          <End Type="BalanceModel.Invoice" Role="Invoice" Multiplicity="*" />
+          <End Type="BalanceModel.MoneyDetail" Role="MoneyDetail" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Bill">
               <PropertyRef Name="billId" />
             </Principal>
-            <Dependent Role="Invoice">
-              <PropertyRef Name="Bill_billId" />
+            <Dependent Role="MoneyDetail">
+              <PropertyRef Name="billId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="DetailMoneyDetail">
+          <End Type="BalanceModel.Detail" Role="Detail" Multiplicity="1" />
+          <End Type="BalanceModel.MoneyDetail" Role="MoneyDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Detail">
+              <PropertyRef Name="detailId" />
+            </Principal>
+            <Dependent Role="MoneyDetail">
+              <PropertyRef Name="detailId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -156,25 +156,25 @@
     <edmx:Diagrams>
       <Diagram Name="BalanceModel" >
         <EntityTypeShape EntityType="BalanceModel.Transaction" Width="1.5" PointX="0.5" PointY="0.75" Height="1.427958984375" />
-        <EntityTypeShape EntityType="BalanceModel.Detail" Width="1.5" PointX="2.875" PointY="1" Height="1.7566536458333335" />
+        <EntityTypeShape EntityType="BalanceModel.Detail" Width="1.5" PointX="2.875" PointY="0.875" Height="1.592306315104167" />
         <EntityTypeShape EntityType="BalanceModel.Type" Width="1.5" PointX="0.625" PointY="3.625" Height="1.4279589843749996" />
-        <EntityTypeShape EntityType="BalanceModel.Bill" Width="1.5" PointX="5" PointY="0.75" Height="1.427958984375" />
-        <EntityTypeShape EntityType="BalanceModel.Invoice" Width="1.5" PointX="3.875" PointY="3.625" Height="1.9210009765624996" />
-        <AssociationConnector Association="BalanceModel.DetailOfInvoice">
-          <ConnectorPoint PointX="4.125" PointY="2.7566536458333335" />
-          <ConnectorPoint PointX="4.125" PointY="3.625" />
-        </AssociationConnector>
+        <EntityTypeShape EntityType="BalanceModel.Bill" Width="1.5" PointX="5.125" PointY="3.125" Height="1.2636116536458335" />
+        <EntityTypeShape EntityType="BalanceModel.MoneyDetail" Width="1.5" PointX="3.125" PointY="3.125" Height="1.5923063151041665" IsExpanded="true" />
         <AssociationConnector Association="BalanceModel.TypeTransaction">
           <ConnectorPoint PointX="1.3125" PointY="3.625" />
           <ConnectorPoint PointX="1.3125" PointY="2.6710009765625" />
         </AssociationConnector>
         <AssociationConnector Association="BalanceModel.TransactionDetail">
-          <ConnectorPoint PointX="2" PointY="1.83550048828125" />
-          <ConnectorPoint PointX="2.875" PointY="1.83550048828125" />
+          <ConnectorPoint PointX="2" PointY="1.6711531575520835" />
+          <ConnectorPoint PointX="2.875" PointY="1.6711531575520835" />
         </AssociationConnector>
-        <AssociationConnector Association="BalanceModel.BillsPerInvoice">
-          <ConnectorPoint PointX="5.1875" PointY="2.177958984375" />
-          <ConnectorPoint PointX="5.1875" PointY="3.625" />
+        <AssociationConnector Association="BalanceModel.BillOfMoneyDetail">
+          <ConnectorPoint PointX="5.125" PointY="3.8389794921875" />
+          <ConnectorPoint PointX="4.625" PointY="3.8389794921875" />
+        </AssociationConnector>
+        <AssociationConnector Association="BalanceModel.DetailMoneyDetail">
+          <ConnectorPoint PointX="3.75" PointY="2.6316536458333335" />
+          <ConnectorPoint PointX="3.75" PointY="3.125" />
         </AssociationConnector>
       </Diagram>
     </edmx:Diagrams>
