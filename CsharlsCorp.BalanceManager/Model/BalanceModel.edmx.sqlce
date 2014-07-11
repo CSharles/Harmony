@@ -1,0 +1,163 @@
+
+-- --------------------------------------------------
+-- Entity Designer DDL Script for SQL Server Compact Edition
+-- --------------------------------------------------
+-- Date Created: 07/09/2014 17:21:52
+-- Generated from EDMX file: C:\Documents and Settings\Carlos\Mis documentos\Visual Studio 2010\Projects\BalanceManager\CsharlsCorp.BalanceManager\Model\BalanceModel.edmx
+-- --------------------------------------------------
+
+
+-- --------------------------------------------------
+-- Dropping existing FOREIGN KEY constraints
+-- NOTE: if the constraint does not exist, an ignorable error will be reported.
+-- --------------------------------------------------
+
+
+-- --------------------------------------------------
+-- Dropping existing tables
+-- NOTE: if the table does not exist, an ignorable error will be reported.
+-- --------------------------------------------------
+
+
+-- --------------------------------------------------
+-- Creating all tables
+-- --------------------------------------------------
+
+-- Creating table 'Transactions'
+CREATE TABLE [Transactions] (
+    [transactionId] int IDENTITY(1,1) NOT NULL,
+    [amount] decimal(2,0)  NOT NULL,
+    [date] datetime  NOT NULL,
+    [typeId] int  NOT NULL
+);
+GO
+
+-- Creating table 'Details'
+CREATE TABLE [Details] (
+    [detailId] int IDENTITY(1,1) NOT NULL,
+    [description] nvarchar(100)  NOT NULL,
+    [transactionId] int  NOT NULL,
+    [Transaction_transactionId] int  NOT NULL
+);
+GO
+
+-- Creating table 'Types'
+CREATE TABLE [Types] (
+    [typeId] int IDENTITY(1,1) NOT NULL,
+    [type] nvarchar(25)  NOT NULL
+);
+GO
+
+-- Creating table 'Bills'
+CREATE TABLE [Bills] (
+    [billId] int IDENTITY(1,1) NOT NULL,
+    [denomination] nvarchar(30)  NOT NULL
+);
+GO
+
+-- Creating table 'MoneyDetail'
+CREATE TABLE [MoneyDetail] (
+    [invoiceId] int IDENTITY(1,1) NOT NULL,
+    [billQuantity] int  NOT NULL,
+    [billId] int  NOT NULL,
+    [detailId] int  NOT NULL
+);
+GO
+
+-- --------------------------------------------------
+-- Creating all PRIMARY KEY constraints
+-- --------------------------------------------------
+
+-- Creating primary key on [transactionId] in table 'Transactions'
+ALTER TABLE [Transactions]
+ADD CONSTRAINT [PK_Transactions]
+    PRIMARY KEY ([transactionId] );
+GO
+
+-- Creating primary key on [detailId] in table 'Details'
+ALTER TABLE [Details]
+ADD CONSTRAINT [PK_Details]
+    PRIMARY KEY ([detailId] );
+GO
+
+-- Creating primary key on [typeId] in table 'Types'
+ALTER TABLE [Types]
+ADD CONSTRAINT [PK_Types]
+    PRIMARY KEY ([typeId] );
+GO
+
+-- Creating primary key on [billId] in table 'Bills'
+ALTER TABLE [Bills]
+ADD CONSTRAINT [PK_Bills]
+    PRIMARY KEY ([billId] );
+GO
+
+-- Creating primary key on [invoiceId] in table 'MoneyDetail'
+ALTER TABLE [MoneyDetail]
+ADD CONSTRAINT [PK_MoneyDetail]
+    PRIMARY KEY ([invoiceId] );
+GO
+
+-- --------------------------------------------------
+-- Creating all FOREIGN KEY constraints
+-- --------------------------------------------------
+
+-- Creating foreign key on [typeId] in table 'Transactions'
+ALTER TABLE [Transactions]
+ADD CONSTRAINT [FK_TypeTransaction]
+    FOREIGN KEY ([typeId])
+    REFERENCES [Types]
+        ([typeId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_TypeTransaction'
+CREATE INDEX [IX_FK_TypeTransaction]
+ON [Transactions]
+    ([typeId]);
+GO
+
+-- Creating foreign key on [Transaction_transactionId] in table 'Details'
+ALTER TABLE [Details]
+ADD CONSTRAINT [FK_TransactionDetail]
+    FOREIGN KEY ([Transaction_transactionId])
+    REFERENCES [Transactions]
+        ([transactionId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_TransactionDetail'
+CREATE INDEX [IX_FK_TransactionDetail]
+ON [Details]
+    ([Transaction_transactionId]);
+GO
+
+-- Creating foreign key on [billId] in table 'MoneyDetail'
+ALTER TABLE [MoneyDetail]
+ADD CONSTRAINT [FK_BillOfMoneyDetail]
+    FOREIGN KEY ([billId])
+    REFERENCES [Bills]
+        ([billId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_BillOfMoneyDetail'
+CREATE INDEX [IX_FK_BillOfMoneyDetail]
+ON [MoneyDetail]
+    ([billId]);
+GO
+
+-- Creating foreign key on [detailId] in table 'MoneyDetail'
+ALTER TABLE [MoneyDetail]
+ADD CONSTRAINT [FK_DetailMoneyDetail]
+    FOREIGN KEY ([detailId])
+    REFERENCES [Details]
+        ([detailId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_DetailMoneyDetail'
+CREATE INDEX [IX_FK_DetailMoneyDetail]
+ON [MoneyDetail]
+    ([detailId]);
+GO
+
+-- --------------------------------------------------
+-- Script has ended
+-- --------------------------------------------------
