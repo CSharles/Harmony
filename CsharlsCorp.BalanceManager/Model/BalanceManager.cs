@@ -7,5 +7,6 @@ namespace CsharlsCorp.BalanceManager.Model
 {
     class BalanceManager
     {
+        BalanceModelContainer context = new BalanceModelContainer();
     }
 }
