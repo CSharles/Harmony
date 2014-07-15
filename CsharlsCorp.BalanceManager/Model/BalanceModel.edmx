@@ -5,103 +5,193 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="BalanceModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.3.5" ProviderManifestToken="3.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="BalanceModelStoreContainer" />
+        <EntityContainer Name="BalanceModelStoreContainer">
+          <EntitySet Name="Bills" EntityType="BalanceModel.Store.Bills" store:Type="Tables" />
+          <EntitySet Name="Details" EntityType="BalanceModel.Store.Details" store:Type="Tables" />
+          <EntitySet Name="MoneyDetail" EntityType="BalanceModel.Store.MoneyDetail" store:Type="Tables" />
+          <EntitySet Name="Transactions" EntityType="BalanceModel.Store.Transactions" store:Type="Tables" />
+          <EntitySet Name="Types" EntityType="BalanceModel.Store.Types" store:Type="Tables" />
+          <AssociationSet Name="DetailForMoneyDetails" Association="BalanceModel.Store.DetailForMoneyDetails">
+            <End Role="Details" EntitySet="Details" />
+            <End Role="MoneyDetail" EntitySet="MoneyDetail" />
+          </AssociationSet>
+          <AssociationSet Name="MoneyDetailBills" Association="BalanceModel.Store.MoneyDetailBills">
+            <End Role="Bills" EntitySet="Bills" />
+            <End Role="MoneyDetail" EntitySet="MoneyDetail" />
+          </AssociationSet>
+          <AssociationSet Name="TransactionDetail" Association="BalanceModel.Store.TransactionDetail">
+            <End Role="Transactions" EntitySet="Transactions" />
+            <End Role="Details" EntitySet="Details" />
+          </AssociationSet>
+          <AssociationSet Name="TypeOfTransaction" Association="BalanceModel.Store.TypeOfTransaction">
+            <End Role="Types" EntitySet="Types" />
+            <End Role="Transactions" EntitySet="Transactions" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Bills">
+          <Key>
+            <PropertyRef Name="billId" />
+          </Key>
+          <Property Name="billId" Type="int" Nullable="false" />
+          <Property Name="denomination" Type="nvarchar" Nullable="false" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="Details">
+          <Key>
+            <PropertyRef Name="detailId" />
+          </Key>
+          <Property Name="detailId" Type="int" Nullable="false" />
+          <Property Name="description" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="transactionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MoneyDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="billQuantity" Type="int" Nullable="false" />
+          <Property Name="billId" Type="int" Nullable="false" />
+          <Property Name="detailId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transactions">
+          <Key>
+            <PropertyRef Name="transactionId" />
+          </Key>
+          <Property Name="transactionId" Type="int" Nullable="false" />
+          <Property Name="amount" Type="money" Nullable="false" />
+          <Property Name="date" Type="datetime" Nullable="false" />
+          <Property Name="typeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Types">
+          <Key>
+            <PropertyRef Name="typeId" />
+          </Key>
+          <Property Name="typeId" Type="int" Nullable="false" />
+          <Property Name="type" Type="nvarchar" Nullable="false" MaxLength="25" />
+        </EntityType>
+        <Association Name="DetailForMoneyDetails">
+          <End Role="Details" Type="BalanceModel.Store.Details" Multiplicity="1" />
+          <End Role="MoneyDetail" Type="BalanceModel.Store.MoneyDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Details">
+              <PropertyRef Name="detailId" />
+            </Principal>
+            <Dependent Role="MoneyDetail">
+              <PropertyRef Name="detailId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MoneyDetailBills">
+          <End Role="Bills" Type="BalanceModel.Store.Bills" Multiplicity="1" />
+          <End Role="MoneyDetail" Type="BalanceModel.Store.MoneyDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bills">
+              <PropertyRef Name="billId" />
+            </Principal>
+            <Dependent Role="MoneyDetail">
+              <PropertyRef Name="billId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TransactionDetail">
+          <End Role="Transactions" Type="BalanceModel.Store.Transactions" Multiplicity="1" />
+          <End Role="Details" Type="BalanceModel.Store.Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transactions">
+              <PropertyRef Name="transactionId" />
+            </Principal>
+            <Dependent Role="Details">
+              <PropertyRef Name="transactionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TypeOfTransaction">
+          <End Role="Types" Type="BalanceModel.Store.Types" Multiplicity="1" />
+          <End Role="Transactions" Type="BalanceModel.Store.Transactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Types">
+              <PropertyRef Name="typeId" />
+            </Principal>
+            <Dependent Role="Transactions">
+              <PropertyRef Name="typeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="BalanceModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
-        <EntityContainer Name="BalanceModelContainer" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Transactions" EntityType="BalanceModel.Transaction" />
-          <EntitySet Name="Details" EntityType="BalanceModel.Detail" />
-          <EntitySet Name="Types" EntityType="BalanceModel.Type" />
+        <EntityContainer Name="BalanceEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Bills" EntityType="BalanceModel.Bill" />
-          <EntitySet Name="MoneyDetail" EntityType="BalanceModel.MoneyDetail" />
-          <AssociationSet Name="TypeTransaction" Association="BalanceModel.TypeTransaction">
-            <End Role="Type" EntitySet="Types" />
-            <End Role="Transaction" EntitySet="Transactions" />
+          <EntitySet Name="Details" EntityType="BalanceModel.Detail" />
+          <EntitySet Name="MoneyDetails" EntityType="BalanceModel.MoneyDetail" />
+          <EntitySet Name="Transactions" EntityType="BalanceModel.Transaction" />
+          <EntitySet Name="Types" EntityType="BalanceModel.Type" />
+          <AssociationSet Name="MoneyDetailBills" Association="BalanceModel.MoneyDetailBills">
+            <End Role="Bill" EntitySet="Bills" />
+            <End Role="MoneyDetail" EntitySet="MoneyDetails" />
+          </AssociationSet>
+          <AssociationSet Name="DetailForMoneyDetails" Association="BalanceModel.DetailForMoneyDetails">
+            <End Role="Detail" EntitySet="Details" />
+            <End Role="MoneyDetail" EntitySet="MoneyDetails" />
           </AssociationSet>
           <AssociationSet Name="TransactionDetail" Association="BalanceModel.TransactionDetail">
             <End Role="Transaction" EntitySet="Transactions" />
             <End Role="Detail" EntitySet="Details" />
           </AssociationSet>
-          <AssociationSet Name="BillOfMoneyDetail" Association="BalanceModel.BillOfMoneyDetail">
-            <End Role="Bill" EntitySet="Bills" />
-            <End Role="MoneyDetail" EntitySet="MoneyDetail" />
-          </AssociationSet>
-          <AssociationSet Name="DetailMoneyDetail" Association="BalanceModel.DetailMoneyDetail">
-            <End Role="Detail" EntitySet="Details" />
-            <End Role="MoneyDetail" EntitySet="MoneyDetail" />
+          <AssociationSet Name="TypeOfTransaction" Association="BalanceModel.TypeOfTransaction">
+            <End Role="Type" EntitySet="Types" />
+            <End Role="Transaction" EntitySet="Transactions" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Transaction">
+        <EntityType Name="Bill">
           <Key>
-            <PropertyRef Name="transactionId" />
+            <PropertyRef Name="billId" />
           </Key>
-          <Property Type="Int32" Name="transactionId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Decimal" Name="amount" Nullable="false" Precision="2" >
-            <Documentation>
-              <LongDescription>amout represent the value of the transaction</LongDescription>
-            </Documentation>
-          </Property>
-          <Property Type="DateTime" Name="date" Nullable="false" />
-          <NavigationProperty Name="Type" Relationship="BalanceModel.TypeTransaction" FromRole="Transaction" ToRole="Type" />
-          <Property Type="Int32" Name="typeId" Nullable="false" />
-          <NavigationProperty Name="Detail" Relationship="BalanceModel.TransactionDetail" FromRole="Transaction" ToRole="Detail" />
+          <Property Type="Int32" Name="billId" Nullable="false" />
+          <Property Type="String" Name="denomination" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="MoneyDetails" Relationship="BalanceModel.MoneyDetailBills" FromRole="Bill" ToRole="MoneyDetail" />
         </EntityType>
         <EntityType Name="Detail">
           <Key>
             <PropertyRef Name="detailId" />
           </Key>
-          <Property Type="Int32" Name="detailId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="description" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="detailId" Nullable="false" />
+          <Property Type="String" Name="description" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="transactionId" Nullable="false" />
+          <NavigationProperty Name="MoneyDetails" Relationship="BalanceModel.DetailForMoneyDetails" FromRole="Detail" ToRole="MoneyDetail" />
           <NavigationProperty Name="Transaction" Relationship="BalanceModel.TransactionDetail" FromRole="Detail" ToRole="Transaction" />
-          <NavigationProperty Name="MoneyDetails" Relationship="BalanceModel.DetailMoneyDetail" FromRole="Detail" ToRole="MoneyDetail" />
+        </EntityType>
+        <EntityType Name="MoneyDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="billQuantity" Nullable="false" />
+          <Property Type="Int32" Name="billId" Nullable="false" />
+          <Property Type="Int32" Name="detailId" Nullable="false" />
+          <NavigationProperty Name="Bill" Relationship="BalanceModel.MoneyDetailBills" FromRole="MoneyDetail" ToRole="Bill" />
+          <NavigationProperty Name="Detail" Relationship="BalanceModel.DetailForMoneyDetails" FromRole="MoneyDetail" ToRole="Detail" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="transactionId" />
+          </Key>
+          <Property Type="Int32" Name="transactionId" Nullable="false" />
+          <Property Type="Decimal" Name="amount" Nullable="false" Precision="19" Scale="4" />
+          <Property Type="DateTime" Name="date" Nullable="false" />
+          <Property Type="Int32" Name="typeId" Nullable="false" />
+          <NavigationProperty Name="Details" Relationship="BalanceModel.TransactionDetail" FromRole="Transaction" ToRole="Detail" />
+          <NavigationProperty Name="Type" Relationship="BalanceModel.TypeOfTransaction" FromRole="Transaction" ToRole="Type" />
         </EntityType>
         <EntityType Name="Type">
           <Key>
             <PropertyRef Name="typeId" />
           </Key>
-          <Property Type="Int32" Name="typeId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="type" Nullable="false" MaxLength="25" />
-          <NavigationProperty Name="Transactions" Relationship="BalanceModel.TypeTransaction" FromRole="Type" ToRole="Transaction" />
+          <Property Type="Int32" Name="typeId" Nullable="false" />
+          <Property Type="String" Name="type" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Transactions" Relationship="BalanceModel.TypeOfTransaction" FromRole="Type" ToRole="Transaction" />
         </EntityType>
-        <EntityType Name="Bill">
-          <Key>
-            <PropertyRef Name="billId" />
-          </Key>
-          <Property Type="Int32" Name="billId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="denomination" Nullable="false" MaxLength="30" />
-          <NavigationProperty Name="MoneyDetails" Relationship="BalanceModel.BillOfMoneyDetail" FromRole="Bill" ToRole="MoneyDetail" />
-        </EntityType>
-        <EntityType Name="MoneyDetail">
-          <Key>
-            <PropertyRef Name="invoiceId" />
-          </Key>
-          <Property Type="Int32" Name="invoiceId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="billQuantity" Nullable="false" />
-          <NavigationProperty Name="Bill" Relationship="BalanceModel.BillOfMoneyDetail" FromRole="MoneyDetail" ToRole="Bill" />
-          <Property Type="Int32" Name="billId" Nullable="false" />
-          <NavigationProperty Name="Detail" Relationship="BalanceModel.DetailMoneyDetail" FromRole="MoneyDetail" ToRole="Detail" />
-          <Property Type="Int32" Name="detailId" Nullable="false" />
-        </EntityType>
-        <Association Name="TypeTransaction">
-          <End Type="BalanceModel.Type" Role="Type" Multiplicity="1" />
-          <End Type="BalanceModel.Transaction" Role="Transaction" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Type">
-              <PropertyRef Name="typeId" />
-            </Principal>
-            <Dependent Role="Transaction">
-              <PropertyRef Name="typeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="TransactionDetail">
-          <End Type="BalanceModel.Transaction" Role="Transaction" Multiplicity="1" />
-          <End Type="BalanceModel.Detail" Role="Detail" Multiplicity="0..1" />
-        </Association>
-        <Association Name="BillOfMoneyDetail">
+        <Association Name="MoneyDetailBills">
           <End Type="BalanceModel.Bill" Role="Bill" Multiplicity="1" />
           <End Type="BalanceModel.MoneyDetail" Role="MoneyDetail" Multiplicity="*" />
           <ReferentialConstraint>
@@ -113,7 +203,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="DetailMoneyDetail">
+        <Association Name="DetailForMoneyDetails">
           <End Type="BalanceModel.Detail" Role="Detail" Multiplicity="1" />
           <End Type="BalanceModel.MoneyDetail" Role="MoneyDetail" Multiplicity="*" />
           <ReferentialConstraint>
@@ -125,13 +215,82 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="TransactionDetail">
+          <End Type="BalanceModel.Transaction" Role="Transaction" Multiplicity="1" />
+          <End Type="BalanceModel.Detail" Role="Detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transaction">
+              <PropertyRef Name="transactionId" />
+            </Principal>
+            <Dependent Role="Detail">
+              <PropertyRef Name="transactionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TypeOfTransaction">
+          <End Type="BalanceModel.Type" Role="Type" Multiplicity="1" />
+          <End Type="BalanceModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type">
+              <PropertyRef Name="typeId" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="typeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="BalanceModelStoreContainer" CdmEntityContainer="BalanceModelContainer">
-    </EntityContainerMapping>
+  <EntityContainerMapping StorageEntityContainer="BalanceModelStoreContainer" CdmEntityContainer="BalanceEntities">
+          <EntitySetMapping Name="Bills">
+            <EntityTypeMapping TypeName="BalanceModel.Bill">
+              <MappingFragment StoreEntitySet="Bills">
+                <ScalarProperty Name="denomination" ColumnName="denomination" />
+                <ScalarProperty Name="billId" ColumnName="billId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Details">
+            <EntityTypeMapping TypeName="BalanceModel.Detail">
+              <MappingFragment StoreEntitySet="Details">
+                <ScalarProperty Name="transactionId" ColumnName="transactionId" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="detailId" ColumnName="detailId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MoneyDetails">
+            <EntityTypeMapping TypeName="BalanceModel.MoneyDetail">
+              <MappingFragment StoreEntitySet="MoneyDetail">
+                <ScalarProperty Name="detailId" ColumnName="detailId" />
+                <ScalarProperty Name="billId" ColumnName="billId" />
+                <ScalarProperty Name="billQuantity" ColumnName="billQuantity" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transactions">
+            <EntityTypeMapping TypeName="BalanceModel.Transaction">
+              <MappingFragment StoreEntitySet="Transactions">
+                <ScalarProperty Name="typeId" ColumnName="typeId" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="transactionId" ColumnName="transactionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Types">
+            <EntityTypeMapping TypeName="BalanceModel.Type">
+              <MappingFragment StoreEntitySet="Types">
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="typeId" ColumnName="typeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
@@ -144,34 +303,34 @@
     <edmx:Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram Name="BalanceModel" >
-        <EntityTypeShape EntityType="BalanceModel.Transaction" Width="1.5" PointX="3" PointY="0.875" Height="1.9210009765624998" />
-        <EntityTypeShape EntityType="BalanceModel.Detail" Width="1.5" PointX="5.25" PointY="1" Height="1.7566536458333335" />
-        <EntityTypeShape EntityType="BalanceModel.Type" Width="1.5" PointX="0.75" PointY="1.125" Height="1.4279589843749998" />
         <EntityTypeShape EntityType="BalanceModel.Bill" Width="1.5" PointX="5.25" PointY="4.125" Height="1.4279589843749996" />
-        <EntityTypeShape EntityType="BalanceModel.MoneyDetail" Width="1.5" PointX="7.5" PointY="0.875" Height="1.9210009765624996" IsExpanded="true" />
-        <AssociationConnector Association="BalanceModel.TypeTransaction">
-          <ConnectorPoint PointX="2.25" PointY="1.8389794921874998" />
-          <ConnectorPoint PointX="3" PointY="1.8389794921874998" />
-        </AssociationConnector>
-        <AssociationConnector Association="BalanceModel.TransactionDetail">
-          <ConnectorPoint PointX="4.5" PointY="1.8783268229166668" />
-          <ConnectorPoint PointX="5.25" PointY="1.8783268229166668" />
-        </AssociationConnector>
-        <AssociationConnector Association="BalanceModel.BillOfMoneyDetail">
+        <EntityTypeShape EntityType="BalanceModel.Detail" Width="1.5" PointX="5.25" PointY="1" Height="1.7566536458333317" />
+        <EntityTypeShape EntityType="BalanceModel.MoneyDetail" Width="1.5" PointX="7.5" PointY="0.875" Height="1.9210009765624996" />
+        <EntityTypeShape EntityType="BalanceModel.Transaction" Width="1.5" PointX="3" PointY="0.875" Height="1.9210009765624996" />
+        <EntityTypeShape EntityType="BalanceModel.Type" Width="1.5" PointX="0.75" PointY="1.125" Height="1.4279589843749994" />
+        <AssociationConnector Association="BalanceModel.MoneyDetailBills" >
           <ConnectorPoint PointX="6.75" PointY="4.8389794921875" />
           <ConnectorPoint PointX="8.25" PointY="4.8389794921875" />
           <ConnectorPoint PointX="8.25" PointY="2.7960009765624996" />
         </AssociationConnector>
-        <AssociationConnector Association="BalanceModel.DetailMoneyDetail">
-          <ConnectorPoint PointX="6.75" PointY="1.8783268229166668" />
-          <ConnectorPoint PointX="7.5" PointY="1.8783268229166668" />
+        <AssociationConnector Association="BalanceModel.DetailForMoneyDetails" >
+          <ConnectorPoint PointX="6.75" PointY="1.8783268229166659" />
+          <ConnectorPoint PointX="7.5" PointY="1.8783268229166659" />
+        </AssociationConnector>
+        <AssociationConnector Association="BalanceModel.TransactionDetail" >
+          <ConnectorPoint PointX="4.5" PointY="1.8783268229166659" />
+          <ConnectorPoint PointX="5.25" PointY="1.8783268229166659" />
+        </AssociationConnector>
+        <AssociationConnector Association="BalanceModel.TypeOfTransaction" >
+          <ConnectorPoint PointX="2.25" PointY="1.8389794921874998" />
+          <ConnectorPoint PointX="3" PointY="1.8389794921874998" />
         </AssociationConnector>
       </Diagram>
     </edmx:Diagrams>

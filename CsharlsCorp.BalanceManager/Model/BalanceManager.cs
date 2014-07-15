@@ -7,9 +7,25 @@ namespace CsharlsCorp.BalanceManager.Model
 {
     class BalanceManager
     {
-        BalanceModelContainer balanceContext = new BalanceModelContainer();
+        BalanceEntities balanceContext = new BalanceEntities();
+        public void AddtypeOfTransaction()
+        {
+            try
+            {
+                Type _type = new Type();
+                _type.typeId = 1;
+                _type.type = "Deposito";
+                balanceContext.Types.AddObject(_type);
+                balanceContext.SaveChanges();
+            }
+            catch (Exception e)
+            {
 
-        public bool AddToBalance(int type, decimal amount, DateTime date,string detail= "")
+                e.ToString();
+            }
+        }
+
+        public bool AddToBalance(int type, decimal amount, DateTime date, string detail = "")
         {
             try
             {
@@ -20,8 +36,8 @@ namespace CsharlsCorp.BalanceManager.Model
                     Detail transactionDetail = new Detail();
 
                     //lastestId Saves the latest id from the TransactionDetails table before add a new value.
-                    int lastestId =balanceContext.Details.LastOrDefault().detailId;
-                    transactionDetail.detailId = lastestId+1;
+                    int lastestId = balanceContext.Details.LastOrDefault().detailId;
+                    transactionDetail.detailId = lastestId + 1;
                     transactionDetail.description = detail;
                     balanceContext.Details.AddObject(transactionDetail);
                     balanceContext.SaveChanges();
@@ -38,30 +54,33 @@ namespace CsharlsCorp.BalanceManager.Model
                 balanceContext.SaveChanges();
             }
             catch (Exception e)
-            { 
-               
+            {
+
             }
             return true;
         }
-        
-        public bool AddToBalance(int type,string detail, decimal amount)
-        {            
-            return this.AddToBalance(type,amount,DateTime.Now,detail);
+
+        public bool AddToBalance(int type, string detail, decimal amount)
+        {
+            return this.AddToBalance(type, amount, DateTime.Now, detail);
         }
 
-        public bool AddToBalance(int type,decimal amount)
+        public bool AddToBalance(int type, decimal amount)
         {
-            return this.AddToBalance(type,amount,DateTime.Now);
+            return this.AddToBalance(type, amount, DateTime.Now);
         }
     }
-        
-public static class test
+
+    public static class test
     {
-        public static void run() 
+        public static void run()
         {
+           /* BalanceManager bm = new BalanceManager();
+            bm.AddToBalance(1, "un dolar", 1);
+            bm.AddToBalance(1, 1);*/
             BalanceManager bm = new BalanceManager();
-            bm.AddToBalance(1,"un dolar",1);
-            bm.AddToBalance(1,1);
+            bm.AddtypeOfTransaction();
 
         }
+    }
 }

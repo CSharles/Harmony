@@ -18,10 +18,10 @@ using System.Runtime.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region Metadatos de relaciones en EDM
 
-[assembly: EdmRelationshipAttribute("BalanceModel", "TypeTransaction", "Type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Type), "Transaction", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CsharlsCorp.BalanceManager.Model.Transaction), true)]
-[assembly: EdmRelationshipAttribute("BalanceModel", "TransactionDetail", "Transaction", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Transaction), "Detail", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(CsharlsCorp.BalanceManager.Model.Detail))]
-[assembly: EdmRelationshipAttribute("BalanceModel", "BillOfMoneyDetail", "Bill", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Bill), "MoneyDetail", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CsharlsCorp.BalanceManager.Model.MoneyDetail), true)]
-[assembly: EdmRelationshipAttribute("BalanceModel", "DetailMoneyDetail", "Detail", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Detail), "MoneyDetail", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CsharlsCorp.BalanceManager.Model.MoneyDetail), true)]
+[assembly: EdmRelationshipAttribute("BalanceModel", "MoneyDetailBills", "Bill", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Bill), "MoneyDetail", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CsharlsCorp.BalanceManager.Model.MoneyDetail), true)]
+[assembly: EdmRelationshipAttribute("BalanceModel", "DetailForMoneyDetails", "Detail", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Detail), "MoneyDetail", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CsharlsCorp.BalanceManager.Model.MoneyDetail), true)]
+[assembly: EdmRelationshipAttribute("BalanceModel", "TransactionDetail", "Transaction", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Transaction), "Detail", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CsharlsCorp.BalanceManager.Model.Detail), true)]
+[assembly: EdmRelationshipAttribute("BalanceModel", "TypeOfTransaction", "Type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CsharlsCorp.BalanceManager.Model.Type), "Transaction", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CsharlsCorp.BalanceManager.Model.Transaction), true)]
 
 #endregion
 
@@ -30,34 +30,34 @@ namespace CsharlsCorp.BalanceManager.Model
     #region Contextos
     
     /// <summary>
-    /// No hay documentación de metadatos disponible.
+    /// Represent the database and its tables.
     /// </summary>
-    public partial class BalanceModelContainer : ObjectContext
+    public partial class BalanceEntities : ObjectContext
     {
         #region Constructores
     
         /// <summary>
-        /// Inicializa un nuevo objeto BalanceModelContainer usando la cadena de conexión encontrada en la sección 'BalanceModelContainer' del archivo de configuración de la aplicación.
+        /// Inicializa un nuevo objeto BalanceEntities usando la cadena de conexión encontrada en la sección 'BalanceEntities' del archivo de configuración de la aplicación.
         /// </summary>
-        public BalanceModelContainer() : base("name=BalanceModelContainer", "BalanceModelContainer")
+        public BalanceEntities() : base("name=BalanceEntities", "BalanceEntities")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
     
         /// <summary>
-        /// Inicializar un nuevo objeto BalanceModelContainer.
+        /// Inicializar un nuevo objeto BalanceEntities.
         /// </summary>
-        public BalanceModelContainer(string connectionString) : base(connectionString, "BalanceModelContainer")
+        public BalanceEntities(string connectionString) : base(connectionString, "BalanceEntities")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
     
         /// <summary>
-        /// Inicializar un nuevo objeto BalanceModelContainer.
+        /// Inicializar un nuevo objeto BalanceEntities.
         /// </summary>
-        public BalanceModelContainer(EntityConnection connection) : base(connection, "BalanceModelContainer")
+        public BalanceEntities(EntityConnection connection) : base(connection, "BalanceEntities")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
@@ -72,54 +72,6 @@ namespace CsharlsCorp.BalanceManager.Model
         #endregion
     
         #region Propiedades de ObjectSet
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        public ObjectSet<Transaction> Transactions
-        {
-            get
-            {
-                if ((_Transactions == null))
-                {
-                    _Transactions = base.CreateObjectSet<Transaction>("Transactions");
-                }
-                return _Transactions;
-            }
-        }
-        private ObjectSet<Transaction> _Transactions;
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        public ObjectSet<Detail> Details
-        {
-            get
-            {
-                if ((_Details == null))
-                {
-                    _Details = base.CreateObjectSet<Detail>("Details");
-                }
-                return _Details;
-            }
-        }
-        private ObjectSet<Detail> _Details;
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        public ObjectSet<Type> Types
-        {
-            get
-            {
-                if ((_Types == null))
-                {
-                    _Types = base.CreateObjectSet<Type>("Types");
-                }
-                return _Types;
-            }
-        }
-        private ObjectSet<Type> _Types;
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -140,28 +92,76 @@ namespace CsharlsCorp.BalanceManager.Model
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        public ObjectSet<MoneyDetail> MoneyDetail
+        public ObjectSet<Detail> Details
         {
             get
             {
-                if ((_MoneyDetail == null))
+                if ((_Details == null))
                 {
-                    _MoneyDetail = base.CreateObjectSet<MoneyDetail>("MoneyDetail");
+                    _Details = base.CreateObjectSet<Detail>("Details");
                 }
-                return _MoneyDetail;
+                return _Details;
             }
         }
-        private ObjectSet<MoneyDetail> _MoneyDetail;
+        private ObjectSet<Detail> _Details;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<MoneyDetail> MoneyDetails
+        {
+            get
+            {
+                if ((_MoneyDetails == null))
+                {
+                    _MoneyDetails = base.CreateObjectSet<MoneyDetail>("MoneyDetails");
+                }
+                return _MoneyDetails;
+            }
+        }
+        private ObjectSet<MoneyDetail> _MoneyDetails;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<Transaction> Transactions
+        {
+            get
+            {
+                if ((_Transactions == null))
+                {
+                    _Transactions = base.CreateObjectSet<Transaction>("Transactions");
+                }
+                return _Transactions;
+            }
+        }
+        private ObjectSet<Transaction> _Transactions;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<Type> Types
+        {
+            get
+            {
+                if ((_Types == null))
+                {
+                    _Types = base.CreateObjectSet<Type>("Types");
+                }
+                return _Types;
+            }
+        }
+        private ObjectSet<Type> _Types;
 
         #endregion
         #region Métodos AddTo
     
         /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet Transactions. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// Método desusado para agregar un nuevo objeto al EntitySet Bills. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
         /// </summary>
-        public void AddToTransactions(Transaction transaction)
+        public void AddToBills(Bill bill)
         {
-            base.AddObject("Transactions", transaction);
+            base.AddObject("Bills", bill);
         }
     
         /// <summary>
@@ -173,27 +173,27 @@ namespace CsharlsCorp.BalanceManager.Model
         }
     
         /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet MoneyDetails. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToMoneyDetails(MoneyDetail moneyDetail)
+        {
+            base.AddObject("MoneyDetails", moneyDetail);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet Transactions. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToTransactions(Transaction transaction)
+        {
+            base.AddObject("Transactions", transaction);
+        }
+    
+        /// <summary>
         /// Método desusado para agregar un nuevo objeto al EntitySet Types. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
         /// </summary>
         public void AddToTypes(Type type)
         {
             base.AddObject("Types", type);
-        }
-    
-        /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet Bills. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
-        /// </summary>
-        public void AddToBills(Bill bill)
-        {
-            base.AddObject("Bills", bill);
-        }
-    
-        /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet MoneyDetail. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
-        /// </summary>
-        public void AddToMoneyDetail(MoneyDetail moneyDetail)
-        {
-            base.AddObject("MoneyDetail", moneyDetail);
         }
 
         #endregion
@@ -291,18 +291,18 @@ namespace CsharlsCorp.BalanceManager.Model
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "BillOfMoneyDetail", "MoneyDetail")]
+        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "MoneyDetailBills", "MoneyDetail")]
         public EntityCollection<MoneyDetail> MoneyDetails
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<MoneyDetail>("BalanceModel.BillOfMoneyDetail", "MoneyDetail");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<MoneyDetail>("BalanceModel.MoneyDetailBills", "MoneyDetail");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<MoneyDetail>("BalanceModel.BillOfMoneyDetail", "MoneyDetail", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<MoneyDetail>("BalanceModel.MoneyDetailBills", "MoneyDetail", value);
                 }
             }
         }
@@ -423,6 +423,28 @@ namespace CsharlsCorp.BalanceManager.Model
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "DetailForMoneyDetails", "MoneyDetail")]
+        public EntityCollection<MoneyDetail> MoneyDetails
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<MoneyDetail>("BalanceModel.DetailForMoneyDetails", "MoneyDetail");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<MoneyDetail>("BalanceModel.DetailForMoneyDetails", "MoneyDetail", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "TransactionDetail", "Transaction")]
         public Transaction Transaction
         {
@@ -454,28 +476,6 @@ namespace CsharlsCorp.BalanceManager.Model
                 }
             }
         }
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "DetailMoneyDetail", "MoneyDetail")]
-        public EntityCollection<MoneyDetail> MoneyDetails
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<MoneyDetail>("BalanceModel.DetailMoneyDetail", "MoneyDetail");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<MoneyDetail>("BalanceModel.DetailMoneyDetail", "MoneyDetail", value);
-                }
-            }
-        }
 
         #endregion
     }
@@ -493,14 +493,14 @@ namespace CsharlsCorp.BalanceManager.Model
         /// <summary>
         /// Crear un nuevo objeto MoneyDetail.
         /// </summary>
-        /// <param name="invoiceId">Valor inicial de la propiedad invoiceId.</param>
+        /// <param name="id">Valor inicial de la propiedad Id.</param>
         /// <param name="billQuantity">Valor inicial de la propiedad billQuantity.</param>
         /// <param name="billId">Valor inicial de la propiedad billId.</param>
         /// <param name="detailId">Valor inicial de la propiedad detailId.</param>
-        public static MoneyDetail CreateMoneyDetail(global::System.Int32 invoiceId, global::System.Int32 billQuantity, global::System.Int32 billId, global::System.Int32 detailId)
+        public static MoneyDetail CreateMoneyDetail(global::System.Int32 id, global::System.Int32 billQuantity, global::System.Int32 billId, global::System.Int32 detailId)
         {
             MoneyDetail moneyDetail = new MoneyDetail();
-            moneyDetail.invoiceId = invoiceId;
+            moneyDetail.Id = id;
             moneyDetail.billQuantity = billQuantity;
             moneyDetail.billId = billId;
             moneyDetail.detailId = detailId;
@@ -515,27 +515,27 @@ namespace CsharlsCorp.BalanceManager.Model
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 invoiceId
+        public global::System.Int32 Id
         {
             get
             {
-                return _invoiceId;
+                return _Id;
             }
             set
             {
-                if (_invoiceId != value)
+                if (_Id != value)
                 {
-                    OninvoiceIdChanging(value);
-                    ReportPropertyChanging("invoiceId");
-                    _invoiceId = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("invoiceId");
-                    OninvoiceIdChanged();
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
                 }
             }
         }
-        private global::System.Int32 _invoiceId;
-        partial void OninvoiceIdChanging(global::System.Int32 value);
-        partial void OninvoiceIdChanged();
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -619,16 +619,16 @@ namespace CsharlsCorp.BalanceManager.Model
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "BillOfMoneyDetail", "Bill")]
+        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "MoneyDetailBills", "Bill")]
         public Bill Bill
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Bill>("BalanceModel.BillOfMoneyDetail", "Bill").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Bill>("BalanceModel.MoneyDetailBills", "Bill").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Bill>("BalanceModel.BillOfMoneyDetail", "Bill").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Bill>("BalanceModel.MoneyDetailBills", "Bill").Value = value;
             }
         }
         /// <summary>
@@ -640,13 +640,13 @@ namespace CsharlsCorp.BalanceManager.Model
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Bill>("BalanceModel.BillOfMoneyDetail", "Bill");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Bill>("BalanceModel.MoneyDetailBills", "Bill");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Bill>("BalanceModel.BillOfMoneyDetail", "Bill", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Bill>("BalanceModel.MoneyDetailBills", "Bill", value);
                 }
             }
         }
@@ -657,16 +657,16 @@ namespace CsharlsCorp.BalanceManager.Model
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "DetailMoneyDetail", "Detail")]
+        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "DetailForMoneyDetails", "Detail")]
         public Detail Detail
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.DetailMoneyDetail", "Detail").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.DetailForMoneyDetails", "Detail").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.DetailMoneyDetail", "Detail").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.DetailForMoneyDetails", "Detail").Value = value;
             }
         }
         /// <summary>
@@ -678,13 +678,13 @@ namespace CsharlsCorp.BalanceManager.Model
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.DetailMoneyDetail", "Detail");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.DetailForMoneyDetails", "Detail");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Detail>("BalanceModel.DetailMoneyDetail", "Detail", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Detail>("BalanceModel.DetailForMoneyDetails", "Detail", value);
                 }
             }
         }
@@ -750,11 +750,8 @@ namespace CsharlsCorp.BalanceManager.Model
         partial void OntransactionIdChanged();
     
         /// <summary>
-        /// 
+        /// No hay documentación de metadatos disponible.
         /// </summary>
-        /// <LongDescription>
-        /// amout represent the value of the transaction
-        /// </LongDescription>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Decimal amount
@@ -834,16 +831,38 @@ namespace CsharlsCorp.BalanceManager.Model
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "TypeTransaction", "Type")]
+        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "TransactionDetail", "Detail")]
+        public EntityCollection<Detail> Details
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Detail>("BalanceModel.TransactionDetail", "Detail");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Detail>("BalanceModel.TransactionDetail", "Detail", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "TypeOfTransaction", "Type")]
         public Type Type
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Type>("BalanceModel.TypeTransaction", "Type").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Type>("BalanceModel.TypeOfTransaction", "Type").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Type>("BalanceModel.TypeTransaction", "Type").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Type>("BalanceModel.TypeOfTransaction", "Type").Value = value;
             }
         }
         /// <summary>
@@ -855,51 +874,13 @@ namespace CsharlsCorp.BalanceManager.Model
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Type>("BalanceModel.TypeTransaction", "Type");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Type>("BalanceModel.TypeOfTransaction", "Type");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Type>("BalanceModel.TypeTransaction", "Type", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "TransactionDetail", "Detail")]
-        public Detail Detail
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.TransactionDetail", "Detail").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.TransactionDetail", "Detail").Value = value;
-            }
-        }
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<Detail> DetailReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Detail>("BalanceModel.TransactionDetail", "Detail");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Detail>("BalanceModel.TransactionDetail", "Detail", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Type>("BalanceModel.TypeOfTransaction", "Type", value);
                 }
             }
         }
@@ -994,18 +975,18 @@ namespace CsharlsCorp.BalanceManager.Model
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "TypeTransaction", "Transaction")]
+        [EdmRelationshipNavigationPropertyAttribute("BalanceModel", "TypeOfTransaction", "Transaction")]
         public EntityCollection<Transaction> Transactions
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Transaction>("BalanceModel.TypeTransaction", "Transaction");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Transaction>("BalanceModel.TypeOfTransaction", "Transaction");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Transaction>("BalanceModel.TypeTransaction", "Transaction", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Transaction>("BalanceModel.TypeOfTransaction", "Transaction", value);
                 }
             }
         }
