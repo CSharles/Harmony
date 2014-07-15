@@ -13,8 +13,8 @@ namespace CsharlsCorp.BalanceManager.Model
             try
             {
                 Type _type = new Type();
-                _type.typeId = 1;
-                _type.type = "Deposito";
+                _type.typeId = 2;
+                _type.type = "Retiro";
                 balanceContext.Types.AddObject(_type);
                 balanceContext.SaveChanges();
             }
