@@ -7,68 +7,65 @@ namespace CsharlsCorp.BalanceManager.Model
 {
     class BalanceManager
     {
-        BalanceEntities balanceContext = new BalanceEntities();
-      
-        public void AddtypeOfTransaction()
+        private Transaction transaction;
+        private Detail detail;
+
+        public void AddToBalance(int type, decimal amount, DateTime date)
         {
-            try
+            using (BalanceEntities balanceDb = new BalanceEntities())
             {
-                Type _type = new Type();
-                _type.typeId = 2;
-                _type.type = "Retiro";
-                balanceContext.Types.AddObject(_type);
-                balanceContext.SaveChanges();
-            }
-            catch (Exception e)
-            {
-
-                e.ToString();
-            }
-        }
-
-        public bool AddToBalance(int type, decimal amount, DateTime date, string detail = "")
-        {
-            try
-            {
-                Transaction transaction = new Transaction();
-
-                if (detail != string.Empty)
+                try
                 {
-                    Detail transactionDetail = new Detail();
-
-                    //lastestId Saves the latest id from the TransactionDetails table before add a new value.
-                    int lastestId = balanceContext.Details.LastOrDefault().detailId;
-                    transactionDetail.detailId = lastestId + 1;
-                    transactionDetail.description = detail;
-                    balanceContext.Details.AddObject(transactionDetail);
-                    balanceContext.SaveChanges();
-
-                    //transaction.TransactionDetailId = transactionDetail.TransactionDetailId;
+                   // Transaction transaction = new Transaction();
+                    transaction.Type = balanceDb.Types.Single(t=>t.typeId==type);
+                    transaction.amount = amount;
+                    transaction.date = date;
+                    balanceDb.SaveChanges();
                 }
-                //lastesTransactiontId Saves the latest id from the Transactions table before add a new value.
-                int lastesTransactiontId = balanceContext.Transactions.LastOrDefault().transactionId;
-                transaction.transactionId = lastesTransactiontId + 1;
-                transaction.typeId = type;
-                transaction.amount = amount;
-
-                balanceContext.Transactions.AddObject(transaction);
-                balanceContext.SaveChanges();
+                catch (Exception e)
+                {
+                    throw e;
+                }
             }
-            catch (Exception e)
+        }
+        public void AddToBalance(int type, decimal amount)
+        {
+            this.AddToBalance(type, amount,DateTime.Today);
+        }
+        public void AddToBalance(string description)
+        {
+            using (BalanceEntities balanceDb=new BalanceEntities())
             {
-
+                try
+                {
+                    Detail detail;
+                    balanceDb.Details.AddObject(detail =
+                        new Detail { description = description, transactionId = transaction.transactionId});
+                    balanceDb.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
             }
-            return true;
         }
-
-        public bool AddToBalance(int type, string detail, decimal amount)
+        public void AddToBalance(int billId, int quantity)
         {
-            return this.AddToBalance(type, amount, DateTime.Now, detail);
-        }
-
-        public bool AddToBalance(int type, decimal amount)
-        {
-            return this.AddToBalance(type, amount, DateTime.Now);
+            using (BalanceEntities balanceDb = new BalanceEntities())
+            {
+                try
+                {
+                    MoneyDetail money= new MoneyDetail();
+                    money.Bill = balanceDb.Bills.Single(b => b.billId == billId);
+                    money.billQuantity = quantity;
+                    money.detailId = detail.detailId;
+                    balanceDb.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+            }
         }
     }
 }
