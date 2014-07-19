@@ -30,7 +30,7 @@ namespace CsharlsCorp.BalanceManager.Model
     #region Contextos
     
     /// <summary>
-    /// Represent the database and its tables.
+    /// No hay documentación de metadatos disponible.
     /// </summary>
     public partial class BalanceEntities : ObjectContext
     {

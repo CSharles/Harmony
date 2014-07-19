@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BalanceModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.3.5" ProviderManifestToken="3.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="BalanceModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="BalanceModelStoreContainer">
           <EntitySet Name="Bills" EntityType="BalanceModel.Store.Bills" store:Type="Tables" />
           <EntitySet Name="Details" EntityType="BalanceModel.Store.Details" store:Type="Tables" />
@@ -32,14 +32,14 @@
           <Key>
             <PropertyRef Name="billId" />
           </Key>
-          <Property Name="billId" Type="int" Nullable="false" />
+          <Property Name="billId" Type="int" Nullable="false" StoreGeneratedPattern="Identity"/>
           <Property Name="denomination" Type="nvarchar" Nullable="false" MaxLength="30" />
         </EntityType>
         <EntityType Name="Details">
           <Key>
             <PropertyRef Name="detailId" />
           </Key>
-          <Property Name="detailId" Type="int" Nullable="false" />
+          <Property Name="detailId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="description" Type="nvarchar" Nullable="false" MaxLength="100" />
           <Property Name="transactionId" Type="int" Nullable="false" />
         </EntityType>
@@ -47,7 +47,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="billQuantity" Type="int" Nullable="false" />
           <Property Name="billId" Type="int" Nullable="false" />
           <Property Name="detailId" Type="int" Nullable="false" />
@@ -56,7 +56,7 @@
           <Key>
             <PropertyRef Name="transactionId" />
           </Key>
-          <Property Name="transactionId" Type="int" Nullable="false" />
+          <Property Name="transactionId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="amount" Type="money" Nullable="false" />
           <Property Name="date" Type="datetime" Nullable="false" />
           <Property Name="typeId" Type="int" Nullable="false" />
@@ -65,7 +65,7 @@
           <Key>
             <PropertyRef Name="typeId" />
           </Key>
-          <Property Name="typeId" Type="int" Nullable="false" />
+          <Property Name="typeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity"/>
           <Property Name="type" Type="nvarchar" Nullable="false" MaxLength="25" />
         </EntityType>
         <Association Name="DetailForMoneyDetails">
@@ -147,7 +147,7 @@
           <Key>
             <PropertyRef Name="billId" />
           </Key>
-          <Property Type="Int32" Name="billId" Nullable="false" />
+          <Property Type="Int32" Name="billId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="denomination" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MoneyDetails" Relationship="BalanceModel.MoneyDetailBills" FromRole="Bill" ToRole="MoneyDetail" />
         </EntityType>
@@ -155,7 +155,7 @@
           <Key>
             <PropertyRef Name="detailId" />
           </Key>
-          <Property Type="Int32" Name="detailId" Nullable="false" />
+          <Property Type="Int32" Name="detailId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="description" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="transactionId" Nullable="false" />
           <NavigationProperty Name="MoneyDetails" Relationship="BalanceModel.DetailForMoneyDetails" FromRole="Detail" ToRole="MoneyDetail" />
@@ -165,7 +165,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Int32" Name="billQuantity" Nullable="false" />
           <Property Type="Int32" Name="billId" Nullable="false" />
           <Property Type="Int32" Name="detailId" Nullable="false" />
@@ -176,7 +176,7 @@
           <Key>
             <PropertyRef Name="transactionId" />
           </Key>
-          <Property Type="Int32" Name="transactionId" Nullable="false" />
+          <Property Type="Int32" Name="transactionId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Decimal" Name="amount" Nullable="false" Precision="19" Scale="4" />
           <Property Type="DateTime" Name="date" Nullable="false" />
           <Property Type="Int32" Name="typeId" Nullable="false" />
@@ -187,7 +187,7 @@
           <Key>
             <PropertyRef Name="typeId" />
           </Key>
-          <Property Type="Int32" Name="typeId" Nullable="false" />
+          <Property Type="Int32" Name="typeId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="type" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Transactions" Relationship="BalanceModel.TypeOfTransaction" FromRole="Type" ToRole="Transaction" />
         </EntityType>
