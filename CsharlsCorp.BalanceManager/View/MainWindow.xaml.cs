@@ -22,7 +22,6 @@ namespace CsharlsCorp.BalanceManager
         public MainWindow()
         {
             InitializeComponent();
-            BalanceManager.Model.test.run();
         }
     }
 }
