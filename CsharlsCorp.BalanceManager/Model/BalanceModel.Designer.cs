@@ -218,12 +218,12 @@ namespace CsharlsCorp.BalanceManager.Model
         /// Crear un nuevo objeto Bill.
         /// </summary>
         /// <param name="billId">Valor inicial de la propiedad billId.</param>
-        /// <param name="denomination">Valor inicial de la propiedad denomination.</param>
-        public static Bill CreateBill(global::System.Int32 billId, global::System.String denomination)
+        /// <param name="value">Valor inicial de la propiedad value.</param>
+        public static Bill CreateBill(global::System.Byte billId, global::System.String value)
         {
             Bill bill = new Bill();
             bill.billId = billId;
-            bill.denomination = denomination;
+            bill.value = value;
             return bill;
         }
 
@@ -235,7 +235,7 @@ namespace CsharlsCorp.BalanceManager.Model
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 billId
+        public global::System.Byte billId
         {
             get
             {
@@ -253,8 +253,8 @@ namespace CsharlsCorp.BalanceManager.Model
                 }
             }
         }
-        private global::System.Int32 _billId;
-        partial void OnbillIdChanging(global::System.Int32 value);
+        private global::System.Byte _billId;
+        partial void OnbillIdChanging(global::System.Byte value);
         partial void OnbillIdChanged();
     
         /// <summary>
@@ -262,24 +262,24 @@ namespace CsharlsCorp.BalanceManager.Model
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String denomination
+        public global::System.String value
         {
             get
             {
-                return _denomination;
+                return _value;
             }
             set
             {
-                OndenominationChanging(value);
-                ReportPropertyChanging("denomination");
-                _denomination = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("denomination");
-                OndenominationChanged();
+                OnvalueChanging(value);
+                ReportPropertyChanging("value");
+                _value = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("value");
+                OnvalueChanged();
             }
         }
-        private global::System.String _denomination;
-        partial void OndenominationChanging(global::System.String value);
-        partial void OndenominationChanged();
+        private global::System.String _value;
+        partial void OnvalueChanging(global::System.String value);
+        partial void OnvalueChanged();
 
         #endregion
     
@@ -497,7 +497,7 @@ namespace CsharlsCorp.BalanceManager.Model
         /// <param name="billQuantity">Valor inicial de la propiedad billQuantity.</param>
         /// <param name="billId">Valor inicial de la propiedad billId.</param>
         /// <param name="detailId">Valor inicial de la propiedad detailId.</param>
-        public static MoneyDetail CreateMoneyDetail(global::System.Int32 id, global::System.Int32 billQuantity, global::System.Int32 billId, global::System.Int32 detailId)
+        public static MoneyDetail CreateMoneyDetail(global::System.Int32 id, global::System.Int16 billQuantity, global::System.Byte billId, global::System.Int32 detailId)
         {
             MoneyDetail moneyDetail = new MoneyDetail();
             moneyDetail.Id = id;
@@ -542,7 +542,7 @@ namespace CsharlsCorp.BalanceManager.Model
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 billQuantity
+        public global::System.Int16 billQuantity
         {
             get
             {
@@ -557,8 +557,8 @@ namespace CsharlsCorp.BalanceManager.Model
                 OnbillQuantityChanged();
             }
         }
-        private global::System.Int32 _billQuantity;
-        partial void OnbillQuantityChanging(global::System.Int32 value);
+        private global::System.Int16 _billQuantity;
+        partial void OnbillQuantityChanging(global::System.Int16 value);
         partial void OnbillQuantityChanged();
     
         /// <summary>
@@ -566,7 +566,7 @@ namespace CsharlsCorp.BalanceManager.Model
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 billId
+        public global::System.Byte billId
         {
             get
             {
@@ -581,8 +581,8 @@ namespace CsharlsCorp.BalanceManager.Model
                 OnbillIdChanged();
             }
         }
-        private global::System.Int32 _billId;
-        partial void OnbillIdChanging(global::System.Int32 value);
+        private global::System.Byte _billId;
+        partial void OnbillIdChanging(global::System.Byte value);
         partial void OnbillIdChanged();
     
         /// <summary>
@@ -709,7 +709,7 @@ namespace CsharlsCorp.BalanceManager.Model
         /// <param name="amount">Valor inicial de la propiedad amount.</param>
         /// <param name="date">Valor inicial de la propiedad date.</param>
         /// <param name="typeId">Valor inicial de la propiedad typeId.</param>
-        public static Transaction CreateTransaction(global::System.Int32 transactionId, global::System.Decimal amount, global::System.DateTime date, global::System.Int32 typeId)
+        public static Transaction CreateTransaction(global::System.Int32 transactionId, global::System.Decimal amount, global::System.DateTime date, global::System.Byte typeId)
         {
             Transaction transaction = new Transaction();
             transaction.transactionId = transactionId;
@@ -802,7 +802,7 @@ namespace CsharlsCorp.BalanceManager.Model
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 typeId
+        public global::System.Byte typeId
         {
             get
             {
@@ -817,8 +817,8 @@ namespace CsharlsCorp.BalanceManager.Model
                 OntypeIdChanged();
             }
         }
-        private global::System.Int32 _typeId;
-        partial void OntypeIdChanging(global::System.Int32 value);
+        private global::System.Byte _typeId;
+        partial void OntypeIdChanging(global::System.Byte value);
         partial void OntypeIdChanged();
 
         #endregion
@@ -902,12 +902,12 @@ namespace CsharlsCorp.BalanceManager.Model
         /// Crear un nuevo objeto Type.
         /// </summary>
         /// <param name="typeId">Valor inicial de la propiedad typeId.</param>
-        /// <param name="type1">Valor inicial de la propiedad type.</param>
-        public static Type CreateType(global::System.Int32 typeId, global::System.String type1)
+        /// <param name="name">Valor inicial de la propiedad name.</param>
+        public static Type CreateType(global::System.Byte typeId, global::System.String name)
         {
             Type type = new Type();
             type.typeId = typeId;
-            type.type = type1;
+            type.name = name;
             return type;
         }
 
@@ -919,7 +919,7 @@ namespace CsharlsCorp.BalanceManager.Model
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 typeId
+        public global::System.Byte typeId
         {
             get
             {
@@ -937,8 +937,8 @@ namespace CsharlsCorp.BalanceManager.Model
                 }
             }
         }
-        private global::System.Int32 _typeId;
-        partial void OntypeIdChanging(global::System.Int32 value);
+        private global::System.Byte _typeId;
+        partial void OntypeIdChanging(global::System.Byte value);
         partial void OntypeIdChanged();
     
         /// <summary>
@@ -946,24 +946,24 @@ namespace CsharlsCorp.BalanceManager.Model
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String type
+        public global::System.String name
         {
             get
             {
-                return _type;
+                return _name;
             }
             set
             {
-                OntypeChanging(value);
-                ReportPropertyChanging("type");
-                _type = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("type");
-                OntypeChanged();
+                OnnameChanging(value);
+                ReportPropertyChanging("name");
+                _name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("name");
+                OnnameChanged();
             }
         }
-        private global::System.String _type;
-        partial void OntypeChanging(global::System.String value);
-        partial void OntypeChanged();
+        private global::System.String _name;
+        partial void OnnameChanging(global::System.String value);
+        partial void OnnameChanged();
 
         #endregion
     

@@ -13,12 +13,12 @@ namespace CsharlsCorp.BalanceManager.Model
         /// <summary>
         /// Represents a transaction object that will be stored in the context.
         /// </summary>
-        private Transaction transaction;
+        private Transaction _transaction;
         /// <summary>
         /// Represents a transaction detail that will be stored in the context. 
         /// If it is null, no detail will be added.
         /// </summary>
-        private Detail detail;
+        private Detail _detail;
 
         #region AddToBalance Methods
 
@@ -34,10 +34,10 @@ namespace CsharlsCorp.BalanceManager.Model
             {
                 try
                 {
-                    // Transaction transaction = new Transaction();
-                    transaction.Type = balanceDb.Types.Single(t => t.typeId == type);
-                    transaction.amount = amount;
-                    transaction.date = date;
+                    _transaction = new Transaction();
+                    _transaction.Type = balanceDb.Types.Single(t => t.typeId == type);
+                    _transaction.amount = amount;
+                    _transaction.date = date;
                     balanceDb.SaveChanges();
                 }
                 catch (Exception e)
@@ -65,9 +65,8 @@ namespace CsharlsCorp.BalanceManager.Model
             {
                 try
                 {
-                    Detail detail;
-                    balanceDb.Details.AddObject(detail =
-                        new Detail { description = description, transactionId = transaction.transactionId });
+                    balanceDb.Details.AddObject(_detail =
+                        new Detail { description = description, transactionId = _transaction.transactionId });
                     balanceDb.SaveChanges();
                 }
                 catch (Exception e)
@@ -81,7 +80,7 @@ namespace CsharlsCorp.BalanceManager.Model
         /// </summary>
         /// <param name="billId">Value that represents the type of bill.</param>
         /// <param name="quantity">Value that represents how many bills will be saved.</param>
-        public void AddToBalance(int billId, int quantity)
+        public void AddToBalance(int billId, short quantity)
         {
             using (BalanceEntities balanceDb = new BalanceEntities())
             {
@@ -90,7 +89,7 @@ namespace CsharlsCorp.BalanceManager.Model
                     MoneyDetail money = new MoneyDetail();
                     money.Bill = balanceDb.Bills.Single(b => b.billId == billId);
                     money.billQuantity = quantity;
-                    money.detailId = detail.detailId;
+                    money.detailId = _detail.detailId;
                     balanceDb.SaveChanges();
                 }
                 catch (Exception e)

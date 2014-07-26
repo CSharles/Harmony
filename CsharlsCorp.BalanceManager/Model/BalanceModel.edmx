@@ -32,8 +32,8 @@
           <Key>
             <PropertyRef Name="billId" />
           </Key>
-          <Property Name="billId" Type="int" Nullable="false" StoreGeneratedPattern="Identity"/>
-          <Property Name="denomination" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="billId" Type="tinyint" Nullable="false"/>
+          <Property Name="value" Type="nvarchar" Nullable="false" MaxLength="16" />
         </EntityType>
         <EntityType Name="Details">
           <Key>
@@ -48,8 +48,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="billQuantity" Type="int" Nullable="false" />
-          <Property Name="billId" Type="int" Nullable="false" />
+          <Property Name="billQuantity" Type="smallint" Nullable="false" />
+          <Property Name="billId" Type="tinyint" Nullable="false" />
           <Property Name="detailId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Transactions">
@@ -59,14 +59,14 @@
           <Property Name="transactionId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="amount" Type="money" Nullable="false" />
           <Property Name="date" Type="datetime" Nullable="false" />
-          <Property Name="typeId" Type="int" Nullable="false" />
+          <Property Name="typeId" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="Types">
           <Key>
             <PropertyRef Name="typeId" />
           </Key>
-          <Property Name="typeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity"/>
-          <Property Name="type" Type="nvarchar" Nullable="false" MaxLength="25" />
+          <Property Name="typeId" Type="tinyint" Nullable="false"/>
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="16" />
         </EntityType>
         <Association Name="DetailForMoneyDetails">
           <End Role="Details" Type="BalanceModel.Store.Details" Multiplicity="1" />
@@ -147,8 +147,8 @@
           <Key>
             <PropertyRef Name="billId" />
           </Key>
-          <Property Type="Int32" Name="billId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="denomination" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="Byte" Name="billId" Nullable="false"/>
+          <Property Type="String" Name="value" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MoneyDetails" Relationship="BalanceModel.MoneyDetailBills" FromRole="Bill" ToRole="MoneyDetail" />
         </EntityType>
         <EntityType Name="Detail">
@@ -166,8 +166,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="billQuantity" Nullable="false" />
-          <Property Type="Int32" Name="billId" Nullable="false" />
+          <Property Type="Int16" Name="billQuantity" Nullable="false" />
+          <Property Type="Byte" Name="billId" Nullable="false" />
           <Property Type="Int32" Name="detailId" Nullable="false" />
           <NavigationProperty Name="Bill" Relationship="BalanceModel.MoneyDetailBills" FromRole="MoneyDetail" ToRole="Bill" />
           <NavigationProperty Name="Detail" Relationship="BalanceModel.DetailForMoneyDetails" FromRole="MoneyDetail" ToRole="Detail" />
@@ -179,7 +179,7 @@
           <Property Type="Int32" Name="transactionId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Decimal" Name="amount" Nullable="false" Precision="19" Scale="4" />
           <Property Type="DateTime" Name="date" Nullable="false" />
-          <Property Type="Int32" Name="typeId" Nullable="false" />
+          <Property Type="Byte" Name="typeId" Nullable="false" />
           <NavigationProperty Name="Details" Relationship="BalanceModel.TransactionDetail" FromRole="Transaction" ToRole="Detail" />
           <NavigationProperty Name="Type" Relationship="BalanceModel.TypeOfTransaction" FromRole="Transaction" ToRole="Type" />
         </EntityType>
@@ -187,8 +187,8 @@
           <Key>
             <PropertyRef Name="typeId" />
           </Key>
-          <Property Type="Int32" Name="typeId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="type" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Type="Byte" Name="typeId" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Transactions" Relationship="BalanceModel.TypeOfTransaction" FromRole="Type" ToRole="Transaction" />
         </EntityType>
         <Association Name="MoneyDetailBills">
@@ -248,7 +248,7 @@
           <EntitySetMapping Name="Bills">
             <EntityTypeMapping TypeName="BalanceModel.Bill">
               <MappingFragment StoreEntitySet="Bills">
-                <ScalarProperty Name="denomination" ColumnName="denomination" />
+                <ScalarProperty Name="value" ColumnName="value" />
                 <ScalarProperty Name="billId" ColumnName="billId" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -285,7 +285,7 @@
           <EntitySetMapping Name="Types">
             <EntityTypeMapping TypeName="BalanceModel.Type">
               <MappingFragment StoreEntitySet="Types">
-                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="typeId" ColumnName="typeId" />
               </MappingFragment>
             </EntityTypeMapping>
