@@ -25,10 +25,10 @@ namespace CsharlsCorp.BalanceManager.Model
         /// <summary>
         /// Saves a transaction to the data source.
         /// </summary>
-        /// <param name="type">Integer that represents the type of the transaction.</param>
+        /// <param name="type">Value that represents the type of the transaction.</param>
         /// <param name="amount">The total value of the transaction.</param>
         /// <param name="date">The date when the transaction was made.</param>
-        public void AddToBalance(int type, decimal amount, DateTime date)
+        public void AddToBalance(byte type, decimal amount, DateTime date)
         {
             using (BalanceEntities balanceDb = new BalanceEntities())
             {
@@ -49,9 +49,9 @@ namespace CsharlsCorp.BalanceManager.Model
         /// <summary>
         /// Saves a transaction to the data source with a default date.
         /// </summary>
-        /// <param name="type">Integer value that represent the type of the transaction.</param>
+        /// <param name="type">Value that represent the type of the transaction.</param>
         /// <param name="amount">The amount of money the transaction will have.</param>
-        public void AddToBalance(int type, decimal amount)
+        public void AddToBalance(byte type, decimal amount)
         {
             this.AddToBalance(type, amount, DateTime.Today);
         }
@@ -80,7 +80,7 @@ namespace CsharlsCorp.BalanceManager.Model
         /// </summary>
         /// <param name="billId">Value that represents the type of bill.</param>
         /// <param name="quantity">Value that represents how many bills will be saved.</param>
-        public void AddToBalance(int billId, short quantity)
+        public void AddToBalance(byte billId, short quantity)
         {
             using (BalanceEntities balanceDb = new BalanceEntities())
             {
@@ -100,5 +100,7 @@ namespace CsharlsCorp.BalanceManager.Model
         } 
 
         #endregion
+
+
     }
 }
