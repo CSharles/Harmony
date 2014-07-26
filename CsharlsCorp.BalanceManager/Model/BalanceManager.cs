@@ -97,10 +97,44 @@ namespace CsharlsCorp.BalanceManager.Model
                     throw e;
                 }
             }
-        } 
+        }
 
-        #endregion
+        #endregion//AddToBalance Methods
 
+        #region GetFromBalance Methods
 
+        public Dictionary<byte,string> GetTypes()
+        {
+            try
+            {
+                using (BalanceEntities balanceDb = new BalanceEntities())
+                {
+                    Dictionary<byte, string> dTypes =
+                        balanceDb.Types.ToDictionary(t => t.typeId, t => t.name);
+                    return dTypes;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void GetTransaction(byte typeOf)
+        {
+            try
+            {
+                using (BalanceEntities balanceDb=new BalanceEntities())
+                {
+                    balanceDb.Transactions.Select(t=>t.typeId==typeOf);
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
+        #endregion//GetFromBalance Methods
     }
 }
