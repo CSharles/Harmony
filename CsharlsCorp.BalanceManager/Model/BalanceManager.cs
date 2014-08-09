@@ -119,21 +119,72 @@ namespace CsharlsCorp.BalanceManager.Model
                 throw e;
             }
         }
-        public void GetTransaction(byte typeOf)
+        public Dictionary<byte, string> GetBills()
         {
             try
             {
                 using (BalanceEntities balanceDb=new BalanceEntities())
                 {
-                    balanceDb.Transactions.Select(t=>t.typeId==typeOf);
+                    Dictionary<byte,string> dBills=
+                        balanceDb.Bills.ToDictionary(b => b.billId, b => b.value);
+                    return dBills;
                 }
             }
             catch (Exception e)
             {
-
                 throw e;
             }
         }
+        public decimal GetTotal()
+        {
+            using (BalanceEntities balanceDb = new BalanceEntities())
+            {
+                try
+                {
+                    decimal _savings = balanceDb.Transactions.Where(t => t.typeId == 1).Sum(t=>t.amount);
+                    decimal _withdraws = balanceDb.Transactions.Where(t => t.typeId == 2).Sum(t => t.amount);
+                    decimal _loans = balanceDb.Transactions.Where(t => t.typeId == 3).Sum(t => t.amount);
+                    decimal _charges = balanceDb.Transactions.Where(t => t.typeId == 4).Sum(t => t.amount);
+
+                    return (_savings - (_withdraws + _loans + _charges));
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+        }
+        public IEnumerable<Transaction> GetTransactions(byte ofType)
+        {
+            try
+            {
+                using (BalanceEntities balanceDb=new BalanceEntities())
+                {
+                   var qTransactions= 
+                       balanceDb.Transactions.Where(t=>t.typeId==ofType);
+                   return qTransactions.ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public IEnumerable<object> GetDetails(int ofTransaction)
+        {
+            using (BalanceEntities balanceDb=new BalanceEntities())
+            {
+                var qDetail=balanceDb.Details.Where(d => d.Transaction.transactionId==ofTransaction);
+                var qAllDetails =
+                    balanceDb.MoneyDetails.
+                    Join(qDetail, money => money.detailId, detail => detail.detailId,
+                    (money, detail) => new{money,detail});
+                return qAllDetails;
+                
+            }
+        }
+    
 
         #endregion//GetFromBalance Methods
     }
