@@ -103,7 +103,11 @@ namespace CsharlsCorp.BalanceManager.Model
 
         #region GetFromBalance Methods
 
-        public Dictionary<byte,string> GetTypes()
+        /// <summary>
+        /// Creates a dictionary with the types of the transactions
+        /// </summary>
+        /// <returns>A Collection with the type of transactions</returns>
+        public Dictionary<byte, string> GetTypes()
         {
             try
             {
@@ -119,13 +123,17 @@ namespace CsharlsCorp.BalanceManager.Model
                 throw e;
             }
         }
+        /// <summary>
+        /// Creates a dictionary with the types o the bills
+        /// </summary>
+        /// <returns>A Collection with the types of bills</returns>
         public Dictionary<byte, string> GetBills()
         {
             try
             {
-                using (BalanceEntities balanceDb=new BalanceEntities())
+                using (BalanceEntities balanceDb = new BalanceEntities())
                 {
-                    Dictionary<byte,string> dBills=
+                    Dictionary<byte, string> dBills =
                         balanceDb.Bills.ToDictionary(b => b.billId, b => b.value);
                     return dBills;
                 }
@@ -135,13 +143,17 @@ namespace CsharlsCorp.BalanceManager.Model
                 throw e;
             }
         }
+        /// <summary>
+        /// Method used to calculate the total amount of the savings
+        /// </summary>
+        /// <returns>A decimal value that represents the Total of savings</returns>
         public decimal GetTotal()
         {
             using (BalanceEntities balanceDb = new BalanceEntities())
             {
                 try
                 {
-                    decimal _savings = balanceDb.Transactions.Where(t => t.typeId == 1).Sum(t=>t.amount);
+                    decimal _savings = balanceDb.Transactions.Where(t => t.typeId == 1).Sum(t => t.amount);
                     decimal _withdraws = balanceDb.Transactions.Where(t => t.typeId == 2).Sum(t => t.amount);
                     decimal _loans = balanceDb.Transactions.Where(t => t.typeId == 3).Sum(t => t.amount);
                     decimal _charges = balanceDb.Transactions.Where(t => t.typeId == 4).Sum(t => t.amount);
@@ -155,15 +167,40 @@ namespace CsharlsCorp.BalanceManager.Model
                 }
             }
         }
+        /// <summary>
+        /// Method used to retrive all the transactions
+        /// </summary>
+        /// <returns>An IEnumerable of Transaction type</returns>
+        public IEnumerable<Transaction> AllTransactions()
+        {
+            using (BalanceEntities balanceDb = new BalanceEntities())
+            {
+                try
+                {
+                    var _transactions = balanceDb.Transactions.Distinct();
+                    return _transactions;
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+        }
+        /// <summary>
+        /// Method used to retrive the transactions of a certein type
+        /// </summary>
+        /// <param name="ofType">A byte value that represent the type of the transaction</param>
+        /// <returns>An IEnumerable of Transaction type </returns>
         public IEnumerable<Transaction> GetTransactions(byte ofType)
         {
             try
             {
-                using (BalanceEntities balanceDb=new BalanceEntities())
+                using (BalanceEntities balanceDb = new BalanceEntities())
                 {
-                   var qTransactions= 
-                       balanceDb.Transactions.Where(t=>t.typeId==ofType);
-                   return qTransactions.ToList();
+                    var qTransactions =
+                        balanceDb.Transactions.Where(t => t.typeId == ofType);
+                    return qTransactions.ToList();
                 }
             }
             catch (Exception e)
@@ -171,20 +208,26 @@ namespace CsharlsCorp.BalanceManager.Model
                 throw e;
             }
         }
+        /// <summary>
+        /// Method used to retrive the details of a certein transaction
+        /// </summary>
+        /// <param name="ofTransaction">Value that represent the Id of the transaction</param>
+        /// <returns>An IEnumerable of objects with the Detail,Bills and Bill's values</returns>
         public IEnumerable<object> GetDetails(int ofTransaction)
         {
-            using (BalanceEntities balanceDb=new BalanceEntities())
+            using (BalanceEntities balanceDb = new BalanceEntities())
             {
-                var qDetail=balanceDb.Details.Where(d => d.Transaction.transactionId==ofTransaction);
-                var qAllDetails =
-                    balanceDb.MoneyDetails.
-                    Join(qDetail, money => money.detailId, detail => detail.detailId,
-                    (money, detail) => new{money,detail});
-                return qAllDetails;
-                
+                var qDetail = balanceDb.Details.Where(d => d.Transaction.transactionId == ofTransaction);
+                var _Details = balanceDb.MoneyDetails.Join(
+                    qDetail, money => money.detailId, detail => detail.detailId, (money, detail) => new
+                    {
+                        Description = detail.description,
+                        Bills = money.billQuantity,
+                        Value = money.Bill.value
+                    });
+                return _Details;
             }
         }
-    
 
         #endregion//GetFromBalance Methods
     }
