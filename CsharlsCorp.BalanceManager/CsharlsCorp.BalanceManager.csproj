@@ -62,7 +62,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="View\MainWindow.xaml">
+    <Compile Include="Views\TypetoColorConverter.cs" />
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -70,14 +71,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\BalanceManager.cs" />
+    <Compile Include="Model\BManager.cs" />
     <Compile Include="Model\BalanceModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BalanceModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\ViewModel.cs" />
-    <Compile Include="View\MainWindow.xaml.cs">
+    <Compile Include="ViewModels\ActionCommand.cs" />
+    <Compile Include="ViewModels\BalanceMannagerViewModel.cs" />
+    <Compile Include="ViewModels\ViewModel.cs" />
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -105,6 +108,7 @@
       <LastGenOutput>BalanceModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="App.Config" />
+    <None Include="Properties\DataSources\CsharlsCorp.BalanceManager.Model.BalanceEntities.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

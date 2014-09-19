@@ -1,8 +1,67 @@
 ﻿<Window x:Class="CsharlsCorp.BalanceManager.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+        xmlns:vm="clr-namespace:CsharlsCorp.BalanceManager.ViewModels"      
+        xmlns:local="clr-namespace:CsharlsCorp.BalanceManager.Views"
+        Title="MainWindow" Height="350" Width="525" FontFamily="Segoe UI">
+    
+    <Window.Resources>
+        <vm:BalanceMannagerViewModel x:Key="ViewModel" />
+        <local:TypetoColorConverter x:Key="typeConverter"/>        
+        <DataTemplate x:Key="AmountColumnTemplate">
+            <TextBlock Margin="0,2,0,2"
+                       Text="{Binding amount,StringFormat=C}"
+                       Foreground="{Binding Path=Type.typeId,Converter={StaticResource typeConverter}}"
+                       FontWeight="Black"
+                       FontSize="12"/>
+        </DataTemplate>
+        <DataTemplate x:Key="DateColumnTemplate">
+            <TextBlock Margin="0,2,0,2"   
+                       Text="{Binding date,StringFormat=d}"
+                       FontWeight="Black"
+                       FontSize="12" />
+        </DataTemplate>
+        <DataTemplate x:Key="TypeColumnTemplate">
+            <TextBlock Margin="0,2,0,2"                       
+                       Text="{Binding Type.name}"
+                       FontWeight="Black"
+                       FontSize="12" />
+        </DataTemplate>
+        <CollectionViewSource  x:Key="itemGroups" Source="{Binding Path=Transactions}">
+            <CollectionViewSource.SortDescriptions>
+               
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </Window.Resources>
+    
+    <Grid DataContext="{Binding Source={StaticResource ViewModel}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="General View"
+                   FontSize="24"
+                   FontStretch="Condensed"/>
+        <ListView Grid.Row="1"
+                  ItemsSource="{Binding Transactions}">            
+            <ListView.View>
+            <GridView>
+                <GridViewColumn Header="Amount"
+                                CellTemplate="{StaticResource AmountColumnTemplate}" />
+                <GridViewColumn Header="Date"
+                                CellTemplate="{StaticResource DateColumnTemplate}" />
+                <GridViewColumn Header="Type" 
+                                CellTemplate="{StaticResource TypeColumnTemplate}" />
+            </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Grid.Row="2" Content="Consultar"
+                FontSize="13"
+                Command="{Binding GetTransactions}"/>
     </Grid>
 </Window>

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CsharlsCorp.BalanceManager.Model;
 
-namespace CsharlsCorp.BalanceManager.Model
+
+namespace CsharlsCorp.BalanceManager
 {
     /// <summary>
     /// Class used to interact with the data model.

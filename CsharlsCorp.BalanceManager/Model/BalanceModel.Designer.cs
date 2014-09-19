@@ -886,6 +886,12 @@ namespace CsharlsCorp.BalanceManager.Model
         }
 
         #endregion
+
+        override public string ToString()
+        { 
+            return string.Format("amount={0} date={1} typeId={2}",this.amount,this.date,this.typeId);
+        }
+        
     }
     
     /// <summary>
