@@ -8,19 +8,17 @@ using System.Windows;
 using System.Windows.Data;
 using CsharlsCorp.BalanceManager.Model;
 
-
-
 namespace CsharlsCorp.BalanceManager.ViewModels
 {
-    public class BalanceMannagerViewModel:ViewModel
+    public class BalanceMannagerViewModel : ViewModel
     {
         private BManager _manager = new BManager();
-
         private ObservableCollection<Transaction> _transactions;
+        private ActionCommand _getTransactions;
 
         public BalanceMannagerViewModel()
         {
-
+            this.ShowWindow = new NavigateComand(this);
         }
 
         public ObservableCollection<Transaction> Transactions
@@ -49,24 +47,30 @@ namespace CsharlsCorp.BalanceManager.ViewModels
             set { _transactions = value; }
         }
 
-        private ActionCommand getTransactions;
-
         public ActionCommand GetTransactions
         {
             get {
-                if (getTransactions==null)
+                if (_getTransactions==null)
                 {
-                    getTransactions = new ActionCommand(() =>
+                    _getTransactions = new ActionCommand(() =>
                         {
                             Transactions = new ObservableCollection<Transaction>(_manager.AllTransactions());
-                            
                         });
                 }
-                return getTransactions; 
-            }
-            
+                return _getTransactions; 
+            }            
         }
 
-
+        public NavigateComand ShowWindow { get; set; }
+    
+        public void Navigate(string address)
+        {
+            Uri uriWindow = new Uri(address, UriKind.Relative);
+            var newWindow = (Window)Application.LoadComponent(uriWindow);
+            var mainWindow = (Window)Application.Current.MainWindow;
+            Application.Current.MainWindow = newWindow;
+            newWindow.Show();
+            mainWindow.Close();
+        }
     }
 }

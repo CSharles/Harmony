@@ -3,65 +3,53 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:CsharlsCorp.BalanceManager.ViewModels"      
         xmlns:local="clr-namespace:CsharlsCorp.BalanceManager.Views"
-        Title="MainWindow" Height="350" Width="525" FontFamily="Segoe UI">
+        Title="Balance Manager" Height="480" Width="640" FontFamily="Segoe UI">
     
     <Window.Resources>
         <vm:BalanceMannagerViewModel x:Key="ViewModel" />
-        <local:TypetoColorConverter x:Key="typeConverter"/>        
-        <DataTemplate x:Key="AmountColumnTemplate">
-            <TextBlock Margin="0,2,0,2"
-                       Text="{Binding amount,StringFormat=C}"
-                       Foreground="{Binding Path=Type.typeId,Converter={StaticResource typeConverter}}"
-                       FontWeight="Black"
-                       FontSize="12"/>
-        </DataTemplate>
-        <DataTemplate x:Key="DateColumnTemplate">
-            <TextBlock Margin="0,2,0,2"   
-                       Text="{Binding date,StringFormat=d}"
-                       FontWeight="Black"
-                       FontSize="12" />
-        </DataTemplate>
-        <DataTemplate x:Key="TypeColumnTemplate">
-            <TextBlock Margin="0,2,0,2"                       
-                       Text="{Binding Type.name}"
-                       FontWeight="Black"
-                       FontSize="12" />
-        </DataTemplate>
-        <CollectionViewSource  x:Key="itemGroups" Source="{Binding Path=Transactions}">
-            <CollectionViewSource.SortDescriptions>
-               
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Width" Value="150"/>
+        </Style>
+        <Style x:Key="SettingsButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Width" Value="90" />
+            <Setter Property="Margin" Value="80,0,0,0" />
+        </Style>
     </Window.Resources>
-    
-    <Grid DataContext="{Binding Source={StaticResource ViewModel}}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+
+    <Grid HorizontalAlignment="Center" DataContext="ViewModel">
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.2*"/>
-            <RowDefinition />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="90"/>
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock Text="General View"
-                   FontSize="24"
-                   FontStretch="Condensed"/>
-        <ListView Grid.Row="1"
-                  ItemsSource="{Binding Transactions}">            
-            <ListView.View>
-            <GridView>
-                <GridViewColumn Header="Amount"
-                                CellTemplate="{StaticResource AmountColumnTemplate}" />
-                <GridViewColumn Header="Date"
-                                CellTemplate="{StaticResource DateColumnTemplate}" />
-                <GridViewColumn Header="Type" 
-                                CellTemplate="{StaticResource TypeColumnTemplate}" />
-            </GridView>
-            </ListView.View>
-        </ListView>
-        <Button Grid.Row="2" Content="Consultar"
-                FontSize="13"
-                Command="{Binding GetTransactions}"/>
+        
+        <DockPanel Margin="10,0,50,5" HorizontalAlignment="Stretch">
+            <TextBlock Text="Balance Manager"
+                       FontSize="48" 
+                       DockPanel.Dock="Left" />
+            <Button Style="{StaticResource SettingsButtonStyle}"
+                    DockPanel.Dock="Right"
+                    Command="{Binding ShowWindow}" CommandParameter="/Views/Settings.xaml">
+                Settings
+            </Button>
+        </DockPanel>
+        
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="1" >
+            <Button Content="General View" 
+                    Command="{Binding ShowWindow}"
+                    CommandParameter="/Views/GeneralView.xaml"/>
+            <Button Content="Deposits"
+                    Command="{Binding ShowWindow}" 
+                    CommandParameter="/Views/Deposits.xaml" />
+            <Button Content="Withdraws" 
+                    Command="{Binding ShowWindow}"
+                    CommandParameter="/Views/Withdraws.xaml" />
+            <Button Content="Loans"
+                    Command="{Binding ShowWindow}"
+                    CommandParameter="/Views/Loans.xaml" />
+        </StackPanel>
     </Grid>
+   
 </Window>
