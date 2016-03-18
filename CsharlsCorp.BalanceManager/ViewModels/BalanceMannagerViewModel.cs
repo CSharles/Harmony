@@ -15,12 +15,36 @@ namespace CsharlsCorp.BalanceManager.ViewModels
         private BManager _manager = new BManager();
         private ObservableCollection<Transaction> _transactions;
         private ActionCommand _getTransactions;
+        private ActionCommand _addToBalance;
+        private Transaction _currentTransaction;
 
         public BalanceMannagerViewModel()
         {
             this.ShowWindow = new NavigateComand(this);
         }
 
+        public Transaction CurrentTransaction 
+        { 
+            get
+        {
+            if ((bool)(DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue))
+            {
+                _currentTransaction=new Transaction();
+                _currentTransaction.amount = 0;
+
+            }
+            return CurrentTransaction;
+        }
+            set { CurrentTransaction.amount = (decimal)value; }
+        }
+
+        public ActionCommand AddToBalance() {
+            _addToBalance = new ActionCommand(() => 
+            { 
+            _manager.AddToBalance(CurrentTransaction);
+            });
+            return _addToBalance;
+        }
         public ObservableCollection<Transaction> Transactions
         {
             get 
@@ -72,5 +96,6 @@ namespace CsharlsCorp.BalanceManager.ViewModels
             newWindow.Show();
             mainWindow.Close();
         }
+
     }
 }

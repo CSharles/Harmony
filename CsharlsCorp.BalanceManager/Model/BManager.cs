@@ -100,6 +100,16 @@ namespace CsharlsCorp.BalanceManager
                 }
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="t">Represent an Transaction</param>
+        public void AddToBalance(Transaction t) {
+            using (BalanceEntities balanceDb = new BalanceEntities())
+            {
+                balanceDb.AddToTransactions(t);
+            }
+        }
 
         #endregion//AddToBalance Methods
 

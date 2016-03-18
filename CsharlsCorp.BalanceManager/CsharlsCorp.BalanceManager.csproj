@@ -63,6 +63,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ViewModels\NavigateComand.cs" />
+    <Compile Include="ViewModels\SaveComand.cs" />
     <Compile Include="Views\Deposits.xaml.cs">
       <DependentUpon>Deposits.xaml</DependentUpon>
     </Compile>
